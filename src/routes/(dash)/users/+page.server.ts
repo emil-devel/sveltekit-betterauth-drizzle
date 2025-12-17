@@ -1,14 +1,14 @@
 import type { PageServerLoad } from './$types';
-import { db } from '$lib/server/db';
+import { auth } from '$lib/auth';
 import * as table from '$lib/server/db/schema';
-// import { eq } from 'drizzle-orm';
 import { redirect } from 'sveltekit-flash-message/server';
 import { asc } from 'drizzle-orm';
+import { db } from '$lib/server/db';
 
 export const load = (async (event) => {
-	const session = event.locals.session;
-	if (!session) throw redirect(302, '/sign-in');
-
+	const session = await auth.api.getSession({ headers: event.request.headers });
+	if (!session?.user) throw redirect(302, '/sign-in');
+	console.log('Session in /users:', session);
 	const getUsers = async () => {
 		const result = await db
 			.select({

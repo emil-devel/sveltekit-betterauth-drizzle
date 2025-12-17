@@ -2,10 +2,11 @@
 	import { page } from '$app/state';
 	import favicon from '$lib/assets/favicon.svg';
 	import { Popover, Portal } from '@skeletonlabs/skeleton-svelte';
-	import { House, LogOut, Settings, UserRound, UsersRound } from '@lucide/svelte';
-	import { signOut, useSession } from '$lib/auth-client';
+	import { LogOut, Settings, UserRound, UsersRound } from '@lucide/svelte';
+	import { authClient } from '$lib/auth-client';
+	import { goto } from '$app/navigation';
 
-	const session = useSession();
+	const session = $derived(authClient.useSession());
 
 	const logo_class = 'flex items-center gap-2';
 </script>
@@ -21,20 +22,9 @@
 			{@render siteName()}
 		</span>
 	</h2>
-	{#if $session.data}
+	{#if $session.data?.user}
 		<nav class="flex-auto" aria-label="Hauptnavigation">
 			<ul class="flex items-center justify-center gap-4">
-				<li>
-					<a
-						class="btn preset-outlined-primary-200-800 btn-sm hover:preset-filled-primary-200-800"
-						class:preset-filled-primary-200-800={page.url.pathname === '/'}
-						aria-current={page.url.pathname === '/'}
-						href="/"
-					>
-						<House size="16" />
-						<span>Home</span>
-					</a>
-				</li>
 				<li>
 					<a
 						class="btn preset-outlined-primary-200-800 btn-sm hover:preset-filled-primary-200-800"
@@ -52,7 +42,7 @@
 				<Popover.Trigger
 					class="btn preset-outlined-primary-200-800 btn-sm hover:preset-filled-primary-200-800"
 				>
-					{#if $session.data.user.image}
+					{#if $session.data?.user.image}
 						<img
 							class="w-6"
 							src={$session.data.user.image}
@@ -75,7 +65,13 @@
 								<div class="border-t-2 border-t-primary-100-900 pt-2 text-center">
 									<button
 										onclick={async () => {
-											await signOut();
+											await authClient.signOut({
+												fetchOptions: {
+													onSuccess: () => {
+														goto('/sign-in');
+													}
+												}
+											});
 										}}
 										class="btn preset-filled-secondary-200-800 btn-sm"
 									>

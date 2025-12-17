@@ -1,13 +1,12 @@
 import type { Actions, PageServerLoad } from './$types';
+import { APIError } from 'better-auth/api';
+import { auth } from '$lib/auth';
 import { registerSchema } from '$lib/valibot';
 import { valibot } from 'sveltekit-superforms/adapters';
 import { fail, setError, superValidate } from 'sveltekit-superforms';
 import { redirect } from 'sveltekit-flash-message/server';
 import { db } from '$lib/server/db';
 import { eq } from 'drizzle-orm';
-import { APIError } from 'better-auth/api';
-import { signUp } from '$lib/auth-client';
-import { auth } from '$lib/auth';
 
 export const load = (async () => {
 	const form = await superValidate(valibot(registerSchema));
@@ -29,7 +28,6 @@ export const actions: Actions = {
 		if (emailExist) return setError(form, 'email', 'Email already in use!');
 
 		try {
-			await signUp.email({ name, email, password, image });
 			await auth.api.signUpEmail({
 				body: { name, email, password, image }
 			});
@@ -44,8 +42,11 @@ export const actions: Actions = {
 		}
 
 		redirect(
-			'/sign-in',
-			{ type: 'success', message: 'You are now registered and can log in.' },
+			'/',
+			{
+				type: 'success',
+				message: 'You are now registered and need to verify your email before logging in.'
+			},
 			event.cookies
 		);
 	}

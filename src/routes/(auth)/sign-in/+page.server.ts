@@ -1,6 +1,6 @@
 import type { Actions, PageServerLoad } from './$types';
+import { APIError } from 'better-auth';
 import { auth } from '$lib/auth';
-import { authClient } from '$lib/auth-client';
 import { loginSchema } from '$lib/valibot';
 import { valibot } from 'sveltekit-superforms/adapters';
 import { fail, setError, superValidate } from 'sveltekit-superforms';
@@ -29,13 +29,14 @@ export const actions: Actions = {
 
 		try {
 			await auth.api.signInEmail({ body: { email, password }, asResponse: true });
-			await authClient.signIn.email({ email, password });
 		} catch (error) {
-			return fail(500, {
-				form,
-				message: 'An error has occurred while logging the user.',
-				error: String(error)
-			});
+			if (error instanceof APIError) {
+				return fail(500, {
+					form,
+					message: 'An error has occurred while logging the user.',
+					error: String(error)
+				});
+			}
 		}
 
 		redirect(302, '/', { type: 'info', message: 'You successfully logged in.' }, event.cookies);
