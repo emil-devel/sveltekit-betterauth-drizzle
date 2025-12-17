@@ -41,13 +41,14 @@ export const actions: Actions = {
 			}
 		}
 
-		redirect(
+		throw redirect(
+			303,
 			'/',
 			{
 				type: 'success',
 				message: 'You are now registered and need to verify your email before logging in.'
 			},
-			event.cookies
+			event
 		);
 	}
 };

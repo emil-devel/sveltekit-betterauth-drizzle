@@ -1,13 +1,10 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { authClient } from '$lib/auth-client';
 	import { Github, House, LogIn, UsersRound } from '@lucide/svelte';
-
-	const session = $derived(authClient.useSession());
 </script>
 
 <ul class="flex flex-row-reverse flex-wrap items-center gap-4">
-	{#if $session.data?.user}
+	{#if page.data.session?.user}
 		<li>
 			<a
 				class="btn preset-outlined-primary-200-800 btn-sm hover:preset-filled-primary-200-800"

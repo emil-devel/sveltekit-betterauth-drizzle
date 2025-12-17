@@ -8,7 +8,7 @@ import { db } from '$lib/server/db';
 export const load = (async (event) => {
 	const session = await auth.api.getSession({ headers: event.request.headers });
 	if (!session?.user) throw redirect(302, '/sign-in');
-	console.log('Session in /users:', session);
+
 	const getUsers = async () => {
 		const result = await db
 			.select({

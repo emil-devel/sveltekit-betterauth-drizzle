@@ -28,7 +28,7 @@ export const actions: Actions = {
 		}
 
 		try {
-			await auth.api.signInEmail({ body: { email, password }, asResponse: true });
+			await auth.api.signInEmail({ body: { email, password } });
 		} catch (error) {
 			if (error instanceof APIError) {
 				return fail(500, {
@@ -39,6 +39,6 @@ export const actions: Actions = {
 			}
 		}
 
-		redirect(302, '/', { type: 'info', message: 'You successfully logged in.' }, event.cookies);
+		throw redirect(303, '/', { type: 'info', message: 'You successfully logged in.' }, event);
 	}
 };

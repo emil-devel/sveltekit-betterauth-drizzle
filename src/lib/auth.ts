@@ -18,12 +18,13 @@ export const auth = betterAuth({
 		provider: 'pg'
 	}),
 	secret: BETTER_AUTH_SECRET,
-	url: BETTER_AUTH_URL,
+	baseURL: BETTER_AUTH_URL,
+	basePath: '/api/auth',
+	trustedOrigins: [BETTER_AUTH_URL],
 	emailAndPassword: {
 		enabled: true,
 		requireEmailVerification: true,
 		autoSignIn: true, //defaults to true
-		autoSignInAfterVerification: true,
 		sendResetPassword: async ({ user, url }) => {
 			await sendEmail({
 				to: user.email,
@@ -32,10 +33,10 @@ export const auth = betterAuth({
 			});
 		},
 		resetPasswordTokenExpiresIn: 3600,
-		trustedOrigins: [BETTER_AUTH_URL],
-		basePath: '/api/auth'
+		trustedOrigins: [BETTER_AUTH_URL]
 	},
 	emailVerification: {
+		autoSignInAfterVerification: true,
 		sendVerificationEmail: async ({ user, url }) => {
 			void sendEmail({
 				to: user.email,

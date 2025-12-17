@@ -6,8 +6,6 @@
 	import { authClient } from '$lib/auth-client';
 	import { goto } from '$app/navigation';
 
-	const session = $derived(authClient.useSession());
-
 	const logo_class = 'flex items-center gap-2';
 </script>
 
@@ -22,7 +20,7 @@
 			{@render siteName()}
 		</span>
 	</h2>
-	{#if $session.data?.user}
+	{#if page.data.session?.user}
 		<nav class="flex-auto" aria-label="Hauptnavigation">
 			<ul class="flex items-center justify-center gap-4">
 				<li>
@@ -42,16 +40,16 @@
 				<Popover.Trigger
 					class="btn preset-outlined-primary-200-800 btn-sm hover:preset-filled-primary-200-800"
 				>
-					{#if $session.data?.user.image}
+					{#if page.data.session?.user.image}
 						<img
 							class="w-6"
-							src={$session.data.user.image}
-							alt="Avatar {$session.data.user.name}"
+							src={page.data.session.user.image}
+							alt="Avatar {page.data.session.user.name}"
 						/>
 					{:else}
 						<UserRound size="16" />
 					{/if}
-					{$session.data?.user.name}
+					{page.data.session?.user.name}
 				</Popover.Trigger>
 				<Portal>
 					<Popover.Positioner>
