@@ -3,10 +3,10 @@
 	import { loginSchema } from '$lib/valibot';
 	import { valibot } from 'sveltekit-superforms/adapters';
 	import { superForm } from 'sveltekit-superforms';
-	import { ArrowRight, Github, Lock, LogIn, Mail } from '@lucide/svelte';
+	import { ArrowRight, Github, Globe, Lock, LogIn, Mail } from '@lucide/svelte';
+	import { signIn } from '$lib/auth-client';
 	import { fly, slide } from 'svelte/transition';
 	import { flip } from 'svelte/animate';
-	import { signIn } from '$lib/auth-client';
 
 	let props: PageProps = $props();
 	let data = $state(props.data);
@@ -48,6 +48,7 @@
 			}}
 		>
 			<!-- No Lucide Google Icon - Lucide does not accept brand logos -->
+			<Globe size={16} />
 			Sign In with Google
 		</button>
 	</div>

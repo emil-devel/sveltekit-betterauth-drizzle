@@ -14,7 +14,6 @@ import {
 	enum_,
 	maxLength
 } from 'valibot';
-// Keep role values in sync with $lib/permissions/ROLES and Prisma enum
 
 export const loginSchema = object({
 	email: pipe(string(), email(), trim(), toLowerCase()),

@@ -1,6 +1,7 @@
 import { sveltekitCookies } from 'better-auth/svelte-kit';
 import { getRequestEvent } from '$app/server';
 import { betterAuth } from 'better-auth';
+import { redirect } from 'sveltekit-flash-message/server';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { db } from '$lib/server/db';
 import { sendEmail } from '$lib/nodemailer';
@@ -26,14 +27,25 @@ export const auth = betterAuth({
 		requireEmailVerification: true,
 		autoSignIn: true, //defaults to true
 		sendResetPassword: async ({ user, url }) => {
-			await sendEmail({
+			void sendEmail({
 				to: user.email,
 				subject: 'Reset your password.',
 				text: `Click the <a href="${url}">link</a> to reset your password.`
 			});
 		},
 		resetPasswordTokenExpiresIn: 3600,
-		trustedOrigins: [BETTER_AUTH_URL]
+		trustedOrigins: [BETTER_AUTH_URL],
+		onPasswordReset: async ({ user }) => {
+			throw redirect(
+				303,
+				'/login',
+				{
+					type: 'success',
+					message: `Password for user ${user.email} has been reset.`
+				},
+				getRequestEvent()
+			);
+		}
 	},
 	emailVerification: {
 		autoSignInAfterVerification: true,

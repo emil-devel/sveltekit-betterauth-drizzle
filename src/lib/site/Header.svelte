@@ -3,8 +3,6 @@
 	import favicon from '$lib/assets/favicon.svg';
 	import { Popover, Portal } from '@skeletonlabs/skeleton-svelte';
 	import { LogOut, Settings, UserRound, UsersRound } from '@lucide/svelte';
-	import { authClient } from '$lib/auth-client';
-	import { goto } from '$app/navigation';
 
 	const logo_class = 'flex items-center gap-2';
 </script>
@@ -16,9 +14,15 @@
 
 <div class="flex items-center justify-between gap-4">
 	<h2 class="h6 lowercase">
-		<span class={logo_class}>
-			{@render siteName()}
-		</span>
+		{#if page.url.pathname === '/'}
+			<span class={logo_class}>
+				{@render siteName()}
+			</span>
+		{:else}
+			<a href="/" class={logo_class}>
+				{@render siteName()}
+			</a>
+		{/if}
 	</h2>
 	{#if page.data.session?.user}
 		<nav class="flex-auto" aria-label="Hauptnavigation">
@@ -61,20 +65,9 @@
 								</ul>
 								<hr class="hr opacity-20" />
 								<div class="border-t-2 border-t-primary-100-900 pt-2 text-center">
-									<button
-										onclick={async () => {
-											await authClient.signOut({
-												fetchOptions: {
-													onSuccess: () => {
-														goto('/sign-in');
-													}
-												}
-											});
-										}}
-										class="btn preset-filled-secondary-200-800 btn-sm"
-									>
+									<a href="/sign-out" class="btn preset-filled-secondary-200-800 btn-sm">
 										Sign Out <LogOut size="16" />
-									</button>
+									</a>
 								</div>
 							</Popover.Description>
 							<Popover.Arrow
