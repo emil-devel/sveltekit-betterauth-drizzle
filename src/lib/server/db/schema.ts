@@ -1,9 +1,14 @@
-import { pgTable, text, timestamp, boolean } from 'drizzle-orm/pg-core';
+import { relations } from 'drizzle-orm';
+import { boolean, pgEnum, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+
+export const roleEnum = pgEnum('user_role', ['USER', 'REDACTEUR', 'ADMIN']);
 
 export const user = pgTable('user', {
 	id: text('id').primaryKey(),
 	name: text('name').notNull(),
 	email: text('email').notNull().unique(),
+	active: boolean('active').default(true).notNull(),
+	role: roleEnum('role').default('USER').notNull(),
 	emailVerified: boolean('email_verified').default(false).notNull(),
 	image: text('image'),
 	createdAt: timestamp('created_at').defaultNow().notNull(),
@@ -12,6 +17,22 @@ export const user = pgTable('user', {
 		.$onUpdate(() => /* @__PURE__ */ new Date())
 		.notNull()
 });
+
+export const profile = pgTable('profile', {
+	id: uuid('id').defaultRandom().primaryKey(),
+	firstName: text('first_name'),
+	lastName: text('last_name'),
+	phone: text('phone'),
+	bio: text('bio'),
+	userId: text('user_id')
+		.notNull()
+		.unique()
+		.references(() => user.id, { onUpdate: 'cascade', onDelete: 'cascade' })
+});
+
+export const profileRelations = relations(profile, ({ one }) => ({
+	user: one(user, { fields: [profile.userId], references: [user.id] })
+}));
 
 export const session = pgTable('session', {
 	id: text('id').primaryKey(),

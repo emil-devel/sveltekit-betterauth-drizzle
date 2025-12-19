@@ -15,6 +15,10 @@
     "valibot": {
       "url": "https://valibot.dev/llms-full.txt",
       "type": "http"
+    },
+    "better-auth": {
+      "url": "https://mcp.chonkie.ai/better-auth/better-auth-builder/mcp",
+      "type": "http"
     }
   }
 }

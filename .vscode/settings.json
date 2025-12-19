@@ -1,0 +1,39 @@
+{
+  "chat.mcp.serverSampling": {
+    "sveltekit-betterauth-drizzle/.vscode/mcp.json: svelte": {
+      "allowedModels": [
+        "copilot/gpt-5.1-codex",
+        "copilot/gpt-5.1-codex-max",
+        "copilot/gpt-5.2"
+      ]
+    },
+    "sveltekit-betterauth-drizzle/.vscode/mcp.json: skeleton": {
+      "allowedModels": [
+        "copilot/gpt-5.1-codex",
+        "copilot/gpt-5.1-codex-max",
+        "copilot/gpt-5.2"
+      ]
+    },
+    "sveltekit-betterauth-drizzle/.vscode/mcp.json: drizzle": {
+      "allowedModels": [
+        "copilot/gpt-5.1-codex",
+        "copilot/gpt-5.1-codex-max",
+        "copilot/gpt-5.2"
+      ]
+    },
+    "sveltekit-betterauth-drizzle/.vscode/mcp.json: valibot": {
+      "allowedModels": [
+        "copilot/gpt-5.1-codex",
+        "copilot/gpt-5.1-codex-max",
+        "copilot/gpt-5.2"
+      ]
+    },
+    "sveltekit-betterauth-drizzle/.vscode/mcp.json: better-auth": {
+      "allowedModels": [
+        "copilot/gpt-5.1-codex",
+        "copilot/gpt-5.1-codex-max",
+        "copilot/gpt-5.2"
+      ]
+    }
+  }
+}

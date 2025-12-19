@@ -4,6 +4,7 @@ import { betterAuth } from 'better-auth';
 import { redirect } from 'sveltekit-flash-message/server';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { db } from '$lib/server/db';
+import * as table from '$lib/server/db/schema';
 import { sendEmail } from '$lib/nodemailer';
 import {
 	BETTER_AUTH_SECRET,
@@ -22,6 +23,35 @@ export const auth = betterAuth({
 	baseURL: BETTER_AUTH_URL,
 	basePath: '/api/auth',
 	trustedOrigins: [BETTER_AUTH_URL],
+	databaseHooks: {
+		user: {
+			create: {
+				after: async (user) => {
+					if (!user?.id) return;
+					await db
+						.insert(table.profile)
+						.values({ userId: user.id })
+						.onConflictDoNothing({ target: table.profile.userId });
+				}
+			}
+		}
+	},
+	user: {
+		additionalFields: {
+			active: {
+				type: 'boolean',
+				required: false,
+				defaultValue: true,
+				input: false
+			},
+			role: {
+				type: 'string',
+				required: false,
+				defaultValue: 'USER',
+				input: false
+			}
+		}
+	},
 	emailAndPassword: {
 		enabled: true,
 		requireEmailVerification: true,

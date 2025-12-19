@@ -3,10 +3,9 @@
 	import { registerSchema } from '$lib/valibot';
 	import { valibot } from 'sveltekit-superforms/adapters';
 	import { superForm } from 'sveltekit-superforms';
-	import { ArrowRight, Github, Lock, LockOpen, LogIn, Mail, UserRound } from '@lucide/svelte';
+	import { ArrowRight, Lock, LockOpen, LogIn, Mail, UserRound } from '@lucide/svelte';
 	import { fly, slide } from 'svelte/transition';
 	import { flip } from 'svelte/animate';
-	import { signIn } from '$lib/auth-client';
 
 	let props: PageProps = $props();
 	let data = $state(props.data);
@@ -49,6 +48,8 @@
 					class="input text-sm"
 					type="email"
 					name="email"
+					oninput={() => ($form.email = ($form.email ?? '').toLowerCase())}
+					onblur={() => ($form.email = ($form.email ?? '').trim().toLowerCase())}
 					aria-invalid={$errors.email ? 'true' : undefined}
 					placeholder="email"
 					spellcheck="false"
@@ -64,6 +65,8 @@
 					class="input text-sm"
 					type="text"
 					name="name"
+					oninput={() => ($form.name = ($form.name ?? '').toLowerCase())}
+					onblur={() => ($form.name = ($form.name ?? '').trim().toLowerCase())}
 					aria-invalid={$errors.name ? 'true' : undefined}
 					placeholder="username"
 					spellcheck="false"

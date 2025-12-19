@@ -5,6 +5,7 @@
 	import { LogOut, Settings, UserRound, UsersRound } from '@lucide/svelte';
 
 	const logo_class = 'flex items-center gap-2';
+	const iconSize = 16;
 </script>
 
 {#snippet siteName()}
@@ -32,7 +33,7 @@
 						class="btn preset-outlined-primary-200-800 btn-sm hover:preset-filled-primary-200-800"
 						href="/users"
 					>
-						<UsersRound size="16" />
+						<UsersRound size={iconSize} />
 						<span>Users</span>
 					</a>
 				</li>
@@ -60,13 +61,17 @@
 						<Popover.Content class="max-w-md space-y-2 card bg-surface-100-900 p-4 shadow-xl">
 							<Popover.Description>
 								<ul class="list space-y-2 pb-2 text-center text-sm">
-									<li><UserRound /> Role</li>
-									<li><Settings /> Settings</li>
+									<li><UserRound size={iconSize} /> Role</li>
+									<li>
+										<a href="/users/{page.data.session?.user.name}"
+											><Settings size={iconSize} /> Settings</a
+										>
+									</li>
 								</ul>
 								<hr class="hr opacity-20" />
 								<div class="border-t-2 border-t-primary-100-900 pt-2 text-center">
 									<a href="/sign-out" class="btn preset-filled-secondary-200-800 btn-sm">
-										Sign Out <LogOut size="16" />
+										Sign Out <LogOut size={iconSize} />
 									</a>
 								</div>
 							</Popover.Description>

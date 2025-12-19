@@ -63,6 +63,8 @@
 					class="input text-sm"
 					type="text"
 					name="email"
+					oninput={() => ($form.email = ($form.email ?? '').toLowerCase())}
+					onblur={() => ($form.email = ($form.email ?? '').trim().toLowerCase())}
 					aria-invalid={$errors.email ? true : undefined}
 					placeholder="email"
 					spellcheck="false"
