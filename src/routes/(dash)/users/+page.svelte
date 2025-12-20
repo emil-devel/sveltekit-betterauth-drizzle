@@ -13,7 +13,7 @@
 
 	const filteredUsers = $derived(
 		users.filter((user) => {
-			// if (role && role !== '' && user.role !== role) return false;
+			if (role && role !== '' && user.role !== role) return false;
 			const term = search?.trim().toLowerCase();
 			if (!term) return true;
 			const name = (user.name || '').toLowerCase();
@@ -76,7 +76,7 @@
 			<dt
 				class="my-4 grid grid-cols-5 border-b border-b-surface-200-800 py-2 text-center text-sm text-surface-600-400"
 			>
-				<span>&nbsp;</span> <span>name</span> <span>role</span>
+				<span>&nbsp;</span> <span>username</span> <span>role</span>
 				<span class="text-center">active</span>
 				<span class="text-right">registred</span>
 			</dt>
@@ -88,26 +88,24 @@
 					>
 						<Avatar class="h-10 w-10 text-xs">
 							<Avatar.Image src={user.image} alt="Avatar of the user {user.name}" />
-							<!-- <Avatar.Fallback>
+							<Avatar.Fallback>
 								{user.firstName?.at(0)}{user.lastName?.at(0)}
-							</Avatar.Fallback> -->
+							</Avatar.Fallback>
 						</Avatar>
 						<span class="text-surface-100">{user.name}</span>
-						<!-- <span
+						<span
 							class="lowercase"
 							class:text-success-500={user.role === 'USER'}
 							class:text-warning-500={user.role === 'REDACTEUR'}
 							class:text-error-500={user.role === 'ADMIN'}>{user.role}</span
-						> -->
-						<span class="lowercase">{role?.toLowerCase() || 'user'}</span>
-						<!-- <span class="text-center {user.active ? 'text-success-300-700' : 'text-error-300-700'}">
+						>
+						<div class="text-center {user.active ? 'text-success-300-700' : 'text-error-300-700'}">
 							{#if user.active}
 								<Check />
 							{:else}
 								<X />
 							{/if}
-						</span> -->
-						<span><Check /></span>
+						</div>
 						<p class="text-right">
 							<span class="text-xs text-surface-100">{user.createdAt}</span>
 						</p>
@@ -155,7 +153,9 @@
 		</div>
 	{:else}
 		<p class="p-4 text-center text-sm text-surface-600-400">
-			No resilts{search ? ' for "' + search + '"' : ''}{role ? ' as ' + role.toLowerCase() : ''}.
+			No Users found {search ? ' for "' + search + '"' : ''}{role
+				? ' as "' + role.toLowerCase() + '"'
+				: ''}.
 		</p>
 	{/if}
 </article>

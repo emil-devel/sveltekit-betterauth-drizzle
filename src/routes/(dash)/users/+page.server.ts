@@ -4,6 +4,7 @@ import * as table from '$lib/server/db/schema';
 import { redirect } from 'sveltekit-flash-message/server';
 import { asc } from 'drizzle-orm';
 import { db } from '$lib/server/db';
+import { eq } from 'drizzle-orm';
 
 export const load = (async (event) => {
 	const session = await auth.api.getSession({ headers: event.request.headers });
@@ -13,16 +14,16 @@ export const load = (async (event) => {
 		const result = await db
 			.select({
 				id: table.user.id,
-				// active: table.user.active,
-				// role: table.user.role,
+				active: table.user.active,
+				role: table.user.role,
 				name: table.user.name,
 				createdAt: table.user.createdAt,
-				image: table.user.image
-				// firstName: table.profile.firstName,
-				// lastName: table.profile.lastName
+				image: table.user.image,
+				firstName: table.profile.firstName,
+				lastName: table.profile.lastName
 			})
 			.from(table.user)
-			// .leftJoin(table.profile, eq(table.user.id, table.profile.userId))
+			.leftJoin(table.profile, eq(table.profile.userId, table.user.id))
 			.orderBy(asc(table.user.name));
 
 		const users = result.map((result) => ({

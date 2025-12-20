@@ -15,6 +15,13 @@
       "when": 1766131984120,
       "tag": "0001_windy_firebird",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1766152721417,
+      "tag": "0002_yielding_alex_wilder",
+      "breakpoints": true
     }
   ]
 }

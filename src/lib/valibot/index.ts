@@ -54,7 +54,7 @@ export const updatedAtSchema = object({ updatedAt: date() });
 export const createdAtSchema = object({ createdAt: date() });
 export const userNameSchema = object({
 	id: string(),
-	username: pipe(
+	name: pipe(
 		string(),
 		minLength(4, 'Username must be at least 4 characters long'),
 		maxLength(12, 'Username must be at most 12 characters long'),

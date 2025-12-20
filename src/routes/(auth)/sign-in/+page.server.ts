@@ -26,7 +26,7 @@ export const actions: Actions = {
 
 		const user = result;
 		if (!user) {
-			return setError(form, 'email', 'User does not exist!');
+			return setError(form, 'email', 'User email does not exist!');
 		}
 
 		try {
