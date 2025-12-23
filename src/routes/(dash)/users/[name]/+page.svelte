@@ -3,36 +3,36 @@
 	import { page } from '$app/state';
 	import { superForm } from 'sveltekit-superforms';
 	import { valibot } from 'sveltekit-superforms/adapters';
-	import { userEmailSchema, userNameSchema } from '$lib/valibot';
+	import { userEmailSchema } from '$lib/valibot';
 	import { Avatar, Switch } from '@skeletonlabs/skeleton-svelte';
 	import { scale, slide } from 'svelte/transition';
 	import { flip } from 'svelte/animate';
 	import {
 		ArrowBigLeft,
 		Mail,
-		UserRound,
+		MailX,
 		UserRoundCheck,
 		UserRoundPen,
 		UserRoundX
 	} from '@lucide/svelte';
 	const iconSize: number = 16;
-
-	import { ROLES } from '$lib/permissions';
-	const roles = ROLES;
+	const roles = ['USER', 'REDACTEUR', 'ADMIN'];
 
 	let props: PageProps = $props();
 	let data = $state(props.data);
 
-	const { id, createdAt, firstName, lastName, updatedAt } = data;
-
 	const {
-		enhance: nameEnhance,
-		errors: nameErrors,
-		form: nameForm
-	} = superForm(data.nameForm, {
-		validators: valibot(userNameSchema),
-		validationMethod: 'oninput'
-	});
+		id,
+		name,
+		image,
+		avatar,
+		email,
+		emailVerified,
+		createdAt,
+		firstName,
+		lastName,
+		updatedAt
+	} = data;
 	const {
 		enhance: emailEnhance,
 		errors: emailErrors,
@@ -45,13 +45,15 @@
 	const { enhance: roleEnhance, form: roleForm } = superForm(data.roleForm);
 	const { enhance: deleteEnhance } = superForm(data.deleteForm);
 
-	const errorsUsername = $derived(($nameErrors.name ?? []) as string[]);
-	const errorsEmail = $derived(($emailErrors.email ?? []) as string[]);
+	const errorsEmail = $derived(($emailErrors.emailPublic ?? []) as string[]);
 
 	let deleteConfirm = $state(false);
 
 	// Form element reference for the active Switch; we update the superform store directly
 	let activeFormEl: HTMLFormElement | null = $state(null);
+
+	const viewerId = $derived(page.data.authUser?.id ?? null);
+	const viewerRole = $derived(page.data.authUser?.role ?? null);
 </script>
 
 <svelte:head>
@@ -78,7 +80,7 @@
 						<UserRoundX size={32} />
 					{/if}
 				</span>
-				{$nameForm.name}
+				{name}
 			</h2>
 			<div
 				class="mt-6 -mb-16 h-24 w-24 rounded-full border-6"
@@ -87,7 +89,7 @@
 				class:border-error-300-700={$roleForm.role === 'ADMIN'}
 			>
 				<Avatar class="h-full w-full bg-surface-100-900">
-					<Avatar.Image src={data.image} alt="Avatar of the user {$nameForm.name}" />
+					<Avatar.Image src={avatar ? avatar : image} alt="Avatar of the user {name}" />
 					<Avatar.Fallback>
 						{firstName?.at(0)}{lastName?.at(0)}
 					</Avatar.Fallback>
@@ -99,36 +101,26 @@
 				<h1 class="h-10 text-right h6 lowercase">
 					{$roleForm.role}
 				</h1>
-				{#if page.data.session?.user.id === id}
-					<form method="post" action="?/name" use:nameEnhance>
-						<input class="input" type="hidden" name="id" value={id} />
-						<label class="label label-text" for="name">Username</label>
+				{#if viewerId === id || viewerRole === 'ADMIN'}
+					<div>
+						<p class="label-text" class:text-warning-500={!emailVerified}>
+							{emailVerified ? 'Verified' : 'Unverified'} Email
+						</p>
 						<div class="input-group grid-cols-[auto_1fr_auto]">
-							<div class="ig-cell preset-tonal py-1.5">
-								<UserRound size={iconSize} />
+							<div class="ig-cell preset-tonal py-1.5" class:text-warning-500={!emailVerified}>
+								{#if emailVerified}
+									<Mail />
+								{:else}
+									<MailX />
+								{/if}
 							</div>
-							<input
-								class="ig-input text-sm"
-								type="text"
-								id="name"
-								name="name"
-								bind:value={$nameForm.name}
-								spellcheck="false"
-							/>
-							<button class="ig-btn preset-tonal btn-sm" type="submit"> Submit </button>
+							<span class="ig-input text-sm">
+								<a href="mailto:{email}">{email}</a>
+							</span>
 						</div>
-					</form>
-					<div class="mx-auto max-w-xs space-y-1.5 text-center text-sm" aria-live="polite">
-						{#each errorsUsername as message, i (i)}
-							<p
-								class="card preset-filled-error-300-700 p-2"
-								transition:slide={{ duration: 140 }}
-								animate:flip={{ duration: 160 }}
-							>
-								{message}
-							</p>
-						{/each}
 					</div>
+				{/if}
+				{#if viewerId === id}
 					<form method="post" action="?/email" use:emailEnhance>
 						<input class="input" type="hidden" name="id" value={id} />
 						<label class="label label-text" for="email">Email</label>
@@ -139,8 +131,8 @@
 							<input
 								class="ig-input text-sm"
 								type="email"
-								name="email"
-								bind:value={$emailForm.email}
+								name="emailPublic"
+								bind:value={$emailForm.emailPublic}
 								spellcheck="false"
 							/>
 							<button class="ig-btn preset-tonal btn-sm" type="submit"> Submit </button>
@@ -159,16 +151,16 @@
 					</div>
 				{:else}
 					<div>
-						<p class="label-text">Email</p>
+						<p class="label-text">Public Email</p>
 						<div class="input-group grid-cols-[auto_1fr_auto]">
 							<div class="ig-cell preset-tonal py-1.5"><Mail /></div>
 							<span class="ig-input text-sm">
-								<a href="mailto:{$emailForm.email}">{$emailForm.email}</a>
+								<a href="mailto:{$emailForm.emailPublic}">{$emailForm.emailPublic}</a>
 							</span>
 						</div>
 					</div>
 				{/if}
-				{#if page.data.session?.user.role === 'ADMIN' && page.data.session?.user.id !== id}
+				{#if viewerRole === 'ADMIN' && viewerId !== id}
 					<div class="flex justify-between gap-4">
 						<form bind:this={activeFormEl} method="post" action="?/active" use:activeEnhance>
 							<input class="input" type="hidden" name="id" value={id} />
@@ -207,7 +199,7 @@
 					</div>
 				{/if}
 			</div>
-			{#if page.data.session?.user.role === 'ADMIN' && page.data.session?.user.id !== id}
+			{#if viewerRole === 'ADMIN' && viewerId !== id}
 				<div class="mt-8 h-16 overflow-y-hidden border-t border-surface-200-800 py-8">
 					{#if deleteConfirm}
 						<div
@@ -260,11 +252,11 @@
 			<ArrowBigLeft size={iconSize} />
 			Users
 		</a>
-		{#if page.data.session?.user.role === 'ADMIN' || page.data.session?.user.id === id}
-			<button class="btn preset-filled-secondary-300-700 btn-sm">
+		{#if viewerId === id || viewerRole === 'ADMIN'}
+			<a class="btn preset-filled-secondary-300-700 btn-sm" href="/users/{name}/profile">
 				Profile
 				<UserRoundPen size={iconSize} />
-			</button>
+			</a>
 		{/if}
 	</div>
 </section>

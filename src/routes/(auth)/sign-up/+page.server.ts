@@ -18,7 +18,7 @@ export const load = (async () => {
 export const actions: Actions = {
 	default: async (event) => {
 		const formData = await event.request.formData();
-		const data = sanitizeFormData(formData, { lowercase: ['email', 'name', 'username', 'image'] });
+		const data = sanitizeFormData(formData, { lowercase: ['email', 'name', 'image'] });
 		const form = await superValidate(data, valibot(registerSchema));
 		const { name, email, password, passwordConfirm } = form.data;
 		let image: string | undefined;
@@ -50,7 +50,7 @@ export const actions: Actions = {
 
 			await db
 				.insert(table.profile)
-				.values({ userId })
+				.values({ userId, name })
 				.onConflictDoNothing({ target: table.profile.userId });
 		} catch (error) {
 			if (error instanceof APIError) {

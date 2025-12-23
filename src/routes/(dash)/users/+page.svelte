@@ -87,7 +87,10 @@
 						href="/users/{user.name}"
 					>
 						<Avatar class="h-10 w-10 text-xs">
-							<Avatar.Image src={user.image} alt="Avatar of the user {user.name}" />
+							<Avatar.Image
+								src={user.avatar ? user.avatar : user.image}
+								alt="Avatar of the user {user.name}"
+							/>
 							<Avatar.Fallback>
 								{user.firstName?.at(0)}{user.lastName?.at(0)}
 							</Avatar.Fallback>

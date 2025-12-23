@@ -1,12 +1,12 @@
 import type { Actions, PageServerLoad } from './$types';
 import { auth } from '$lib/auth';
+import { sanitizeFormData } from '$lib/sanitizer';
 import { loginSchema } from '$lib/valibot';
 import { valibot } from 'sveltekit-superforms/adapters';
 import { fail, setError, superValidate } from 'sveltekit-superforms';
 import { redirect } from 'sveltekit-flash-message/server';
 import { db } from '$lib/server/db';
 import { eq } from 'drizzle-orm';
-import { sanitizeFormData } from '$lib/sanitizer';
 
 export const load = (async () => {
 	const form = await superValidate(valibot(loginSchema));
@@ -27,6 +27,13 @@ export const actions: Actions = {
 		const user = result;
 		if (!user) {
 			return setError(form, 'email', 'User email does not exist!');
+		}
+		if (!user.active) {
+			return setError(
+				form,
+				'email',
+				'Your account is currently locked! Please contact your administrator.'
+			);
 		}
 
 		try {

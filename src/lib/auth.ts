@@ -115,10 +115,10 @@ export const auth = betterAuth({
 					return { data: { ...user, name, role } };
 				},
 				after: async (user) => {
-					if (!user?.id) return;
+					if (!user?.id || !user?.name) return;
 					await db
 						.insert(table.profile)
-						.values({ userId: user.id })
+						.values({ userId: user.id, name: user.name })
 						.onConflictDoNothing({ target: table.profile.userId });
 				}
 			}
@@ -178,7 +178,7 @@ export const auth = betterAuth({
 	account: {
 		accountLinking: {
 			enabled: true,
-			trustedProviders: ['github']
+			trustedProviders: ['github', 'google']
 		}
 	},
 	socialProviders: {

@@ -5,12 +5,13 @@ import {
 	minLength,
 	regex,
 	email,
-	check,
 	boolean,
 	date,
 	optional,
 	enum_,
-	maxLength
+	maxLength,
+	union,
+	literal
 } from 'valibot';
 
 export const loginSchema = object({
@@ -73,7 +74,7 @@ export const userNameSchema = object({
 });
 export const userEmailSchema = object({
 	id: string(),
-	email: pipe(string(), email())
+	emailPublic: union([literal(''), pipe(string(), email())])
 });
 export const activeUserSchema = object({ id: string(), active: boolean() });
 
@@ -89,7 +90,7 @@ export const roleUserSchema = object({ id: string(), role: enum_(ROLE_ENUM) });
 // Per-field schemas for profile page partial updates
 export const profileAvatarSchema = object({
 	id: string(),
-	image: string()
+	avatar: string()
 });
 
 export const profileFirstNameSchema = object({
@@ -156,11 +157,11 @@ export const profilePhoneSchema = object({
 				/^\+?[0-9 ]+$/,
 				'Phone number can only contain digits, spaces and an optional leading +'
 			),
-			// 2. Total significant digits (remove spaces) must be 7–15
-			check((v) => {
-				const digits = v.replace(/[^0-9]/g, '');
-				return digits.length >= 7 && digits.length <= 15;
-			}, 'Phone number must contain between 7 and 15 digits')
+			// 2. Total significant digits (ignore non-digits) must be 7–15
+			regex(
+				/^(?=(?:\D*\d){7,15}\D*$)\+?[0-9 ]+$/,
+				'Phone number must contain between 7 and 15 digits'
+			)
 		)
 	)
 });

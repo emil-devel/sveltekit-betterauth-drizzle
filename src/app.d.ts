@@ -4,10 +4,13 @@ declare global {
 	namespace App {
 		// interface Error {}
 		interface Locals {
+			authUser?: import('$lib/permissions').AuthUser | null;
 			session?: Session;
 			user?: User;
 		}
-		// interface PageData {}
+		interface PageData {
+			authUser?: import('$lib/permissions').AuthUser | null;
+		}
 		// interface PageState {}
 		// interface Platform {}
 	}

@@ -7,9 +7,9 @@ export const user = pgTable('user', {
 	id: text('id').primaryKey(),
 	name: text('name').notNull().unique(),
 	email: text('email').notNull().unique(),
+	emailVerified: boolean('email_verified').default(false).notNull(),
 	active: boolean('active').default(true).notNull(),
 	role: roleEnum('role').default('USER').notNull(),
-	emailVerified: boolean('email_verified').default(false).notNull(),
 	image: text('image'),
 	createdAt: timestamp('created_at').defaultNow().notNull(),
 	updatedAt: timestamp('updated_at')
@@ -20,18 +20,24 @@ export const user = pgTable('user', {
 
 export const profile = pgTable('profile', {
 	id: uuid('id').defaultRandom().primaryKey(),
-	firstName: text('first_name'),
-	lastName: text('last_name'),
+	avatar: text('avatar'),
+	firstName: text('firstName'),
+	lastName: text('lastName'),
+	emailPublic: text('email_public'),
 	phone: text('phone'),
 	bio: text('bio'),
 	userId: text('user_id')
-		.notNull()
 		.unique()
-		.references(() => user.id, { onUpdate: 'cascade', onDelete: 'cascade' })
+		.references(() => user.id, { onDelete: 'cascade' })
+		.notNull(),
+	name: text('name')
+		.unique()
+		.references(() => user.name)
+		.notNull()
 });
 
 export const profileRelations = relations(profile, ({ one }) => ({
-	user: one(user, { fields: [profile.userId], references: [user.id] })
+	user: one(user, { fields: [profile.userId, profile.name], references: [user.id, user.name] })
 }));
 
 export const session = pgTable('session', {

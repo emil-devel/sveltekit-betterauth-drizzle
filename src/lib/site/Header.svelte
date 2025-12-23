@@ -1,12 +1,14 @@
 <script lang="ts">
+	import type { AuthUser } from '$lib/permissions';
 	import { page } from '$app/state';
-	import { enhance } from '$app/forms';
 	import favicon from '$lib/assets/favicon.svg';
 	import { Popover, Portal } from '@skeletonlabs/skeleton-svelte';
 	import { House, LogOut, Settings, UserRound, UsersRound } from '@lucide/svelte';
+	const iconSize = 16;
 
 	const logo_class = 'flex items-center gap-2';
-	const iconSize = 16;
+
+	const authUser = $derived(page.data.authUser as AuthUser | null | undefined);
 </script>
 
 {#snippet siteName()}
@@ -59,11 +61,11 @@
 		{#if page.data.session}
 			<Popover>
 				<Popover.Trigger
-					class="btn btn-sm {page.data.session.user.role === 'USER'
+					class="btn btn-sm {authUser?.role === 'USER'
 						? 'preset-filled-success-200-800'
-						: ''} {page.data.session.user.role === 'REDACTEUR'
+						: ''} {authUser?.role === 'REDACTEUR'
 						? 'preset-filled-warning-200-800'
-						: ''} {page.data.session.user.role === 'ADMIN' ? 'preset-filled-error-200-800' : ''}"
+						: ''} {authUser?.role === 'ADMIN' ? 'preset-filled-error-200-800' : ''}"
 				>
 					{#if page.data.session.user.image}
 						<img
@@ -74,7 +76,7 @@
 					{:else}
 						<UserRound size="16" />
 					{/if}
-					{page.data.session.user.name}
+					{authUser?.name ?? page.data.session.user.name}
 				</Popover.Trigger>
 				<Portal>
 					<Popover.Positioner>
@@ -82,16 +84,24 @@
 							<Popover.Description>
 								<ul class="list space-y-2 pb-2 text-center text-sm">
 									<li
-										class:text-success-500={page.data.session.user.role === 'USER'}
-										class:text-warning-500={page.data.session.user.role === 'REDACTEUR'}
-										class:text-error-500={page.data.session.user.role === 'ADMIN'}
+										class:text-success-500={authUser?.role === 'USER'}
+										class:text-warning-500={authUser?.role === 'REDACTEUR'}
+										class:text-error-500={authUser?.role === 'ADMIN'}
 									>
 										<UserRound size={iconSize} />
-										<span>{page.data.session.user.role.toLowerCase()}</span>
+										<span>{(authUser?.role ?? page.data.session.user.role).toLowerCase()}</span>
 									</li>
-									{#if page.url.pathname !== `/users/${page.data.session.user.name}`}
+									{#if authUser?.role === 'ADMIN' && page.url.pathname !== '/users'}
 										<li>
-											<a class="anchor" href="/users/{page.data.session.user.name}">
+											<a class="anchor" href="/users">
+												<UsersRound size={iconSize} />
+												<span>Manage users</span>
+											</a>
+										</li>
+									{/if}
+									{#if authUser?.name && page.url.pathname !== `/users/${authUser.name}`}
+										<li>
+											<a class="anchor" href="/users/{authUser.name}">
 												<Settings size={iconSize} />
 												<span>Settings</span>
 											</a>
