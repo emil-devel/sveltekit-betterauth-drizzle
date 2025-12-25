@@ -2,6 +2,15 @@
 	"name": "sveltekit-betterauth-drizzle",
 	"private": true,
 	"version": "0.0.1",
+	"keywords": [
+		"user management",
+		"user roles",
+		"better-auth",
+		"protected area",
+		"sveltekit",
+		"drizzle",
+		"postgres"
+	],
 	"type": "module",
 	"scripts": {
 		"dev": "vite dev",
