@@ -4,6 +4,7 @@
 	import favicon from '$lib/assets/favicon.svg';
 	import { Popover, Portal } from '@skeletonlabs/skeleton-svelte';
 	import { House, LogOut, Settings, UserRound, UsersRound } from '@lucide/svelte';
+	import Nav from '$lib/site/Nav.svelte';
 	const iconSize = 16;
 
 	const logo_class = 'flex items-center gap-2';
@@ -42,18 +43,7 @@
 						<span>Home</span>
 					</a>
 				</li>
-				<li>
-					<a
-						class="btn preset-outlined-primary-200-800 btn-sm hover:preset-filled-primary-200-800"
-						class:preset-filled-primary-200-800={page.url.pathname === '/users'}
-						class:preset-tonal-primary={page.url.pathname.includes('/users')}
-						aria-current={page.url.pathname === '/users'}
-						href="/users"
-					>
-						<UsersRound size="16" />
-						<span>Users</span>
-					</a>
-				</li>
+				<Nav targetOrdner={'(public)'} />
 			</ul>
 		</nav>
 	{/if}

@@ -42,7 +42,7 @@
 		"prettier": "^3.7.4",
 		"prettier-plugin-svelte": "^3.4.1",
 		"prettier-plugin-tailwindcss": "^0.7.2",
-		"svelte": "^5.46.0",
+		"svelte": "^5.46.1",
 		"svelte-check": "^4.3.5",
 		"sveltekit-flash-message": "^2.4.6",
 		"sveltekit-superforms": "^2.29.1",
@@ -55,7 +55,7 @@
 	},
 	"dependencies": {
 		"@friendofsvelte/tipex": "^0.0.9",
-		"better-auth": "^1.4.7",
+		"better-auth": "^1.4.9",
 		"nodemailer": "^7.0.12",
 		"postgres": "^3.4.7"
 	}

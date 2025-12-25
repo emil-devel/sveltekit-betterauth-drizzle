@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { PageProps } from './$types';
 	import { page } from '$app/state';
+	import { ROLES } from '$lib/permissions';
 	import { superForm } from 'sveltekit-superforms';
 	import { valibot } from 'sveltekit-superforms/adapters';
 	import { userEmailSchema } from '$lib/valibot';
@@ -16,7 +17,6 @@
 		UserRoundX
 	} from '@lucide/svelte';
 	const iconSize: number = 16;
-	const roles = ['USER', 'REDACTEUR', 'ADMIN'];
 
 	let props: PageProps = $props();
 	let data = $state(props.data);
@@ -123,7 +123,7 @@
 				{#if viewerId === id}
 					<form method="post" action="?/email" use:emailEnhance>
 						<input class="input" type="hidden" name="id" value={id} />
-						<label class="label label-text" for="email">Email</label>
+						<label class="label label-text" for="emailPublic">Public Email</label>
 						<div class="input-group grid-cols-[auto_1fr_auto]">
 							<div class="ig-cell preset-tonal py-1.5">
 								<Mail size={iconSize} />
@@ -151,7 +151,7 @@
 					</div>
 				{:else}
 					<div>
-						<p class="label-text">Public Email</p>
+						<p class="label-text">Email</p>
 						<div class="input-group grid-cols-[auto_1fr_auto]">
 							<div class="ig-cell preset-tonal py-1.5"><Mail /></div>
 							<span class="ig-input text-sm">
@@ -190,8 +190,8 @@
 									class="select w-fit text-sm lowercase"
 									name="role"
 								>
-									{#each roles as r}
-										<option value={r}>{r}</option>
+									{#each ROLES as role}
+										<option value={role}>{role}</option>
 									{/each}
 								</select>
 							</label>

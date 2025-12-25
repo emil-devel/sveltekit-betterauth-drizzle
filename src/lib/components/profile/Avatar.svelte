@@ -8,8 +8,8 @@
 	import { ImagePlus, Trash, UserRoundPen, X } from '@lucide/svelte';
 
 	let props = $props();
-	let { id, isSelf, iconSize } = props;
-	let data = $state(props.data);
+	let { id, data, isSelf, iconSize } = $state(props);
+	let { avatarEdit } = $derived(props);
 
 	const {
 		enhance: avatarEnhance,
@@ -23,7 +23,7 @@
 	const errorsAvatar = $derived(($avatarErrors.avatar ?? []) as string[]);
 
 	// FileUpload Component (Avatar)
-	let avatarEdit = $state(false);
+	// let avatarEdit = $state(false);
 	let avatarDelete = $state(false);
 	let avatarFormEl: HTMLFormElement | null = $state(null);
 	let avatarPreview: string | undefined = $state();
@@ -60,17 +60,13 @@
 		setTimeout(() => {
 			if (avatarPreview && errorsAvatar.length === 0) {
 				avatarFormEl?.requestSubmit();
+				avatarEdit = false;
 			}
 		}, 100);
 	};
 </script>
 
 {#if isSelf}
-	<div>
-		<button onclick={() => (avatarEdit = !avatarEdit)} class="btn preset-tonal btn-sm"
-			><UserRoundPen size={iconSize} /> Avatar Edit</button
-		>
-	</div>
 	{#if avatarEdit}
 		<div class="border border-surface-200-800 p-2" transition:slide>
 			<form

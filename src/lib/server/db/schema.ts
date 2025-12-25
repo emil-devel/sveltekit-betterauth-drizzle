@@ -23,7 +23,7 @@ export const profile = pgTable('profile', {
 	avatar: text('avatar'),
 	firstName: text('firstName'),
 	lastName: text('lastName'),
-	emailPublic: text('email_public'),
+	emailPublic: text('email_public').default(''),
 	phone: text('phone'),
 	bio: text('bio'),
 	userId: text('user_id')

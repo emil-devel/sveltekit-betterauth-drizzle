@@ -9,11 +9,11 @@
 	import LastName from '$lib/components/profile/LastName.svelte';
 	import Phone from '$lib/components/profile/Phone.svelte';
 	import Bio from '$lib/components/profile/Bio.svelte';
-	import { ArrowBigLeft, UserRound, UserRoundPen } from '@lucide/svelte';
+	import { ArrowBigLeft, Pen, UserRound, UserRoundPen } from '@lucide/svelte';
 	const iconSize: number = 16;
 
 	let props: PageProps = $props();
-	let data = $state(props.data);
+	let { data } = $state(props);
 
 	// Destructure basic fields
 	const { id, name, userId } = data;
@@ -30,6 +30,7 @@
 		if (!authUserId) return false;
 		return isSelfUtil(authUserId, userId);
 	});
+	let avatarEdit = $state(false);
 </script>
 
 <svelte:head>
@@ -37,7 +38,7 @@
 	<meta name="description" content="User Profile: First Name, Last Name, Phone, Bio." />
 </svelte:head>
 
-<section class="m-auto max-w-xl space-y-4">
+<section class="m-auto max-w-md space-y-4">
 	<div
 		class="divide-y divide-surface-200-800 card border border-surface-200-800 preset-filled-surface-100-900"
 	>
@@ -52,7 +53,7 @@
 				{/if}
 				<span>{name}</span>
 			</h1>
-			<div class="mt-6 -mb-16 h-24 w-24 rounded-full border-6 border-secondary-300-700">
+			<div class="relative mt-6 -mb-16 h-24 w-24 rounded-full border-6 border-secondary-300-700">
 				<Avatar class="h-full w-full bg-surface-100-900">
 					{#key $avatarForm.avatar}
 						<Avatar.Image src={$avatarForm.avatar} alt="Avatar of the user {name}" />
@@ -61,6 +62,12 @@
 						{$firstNameForm.firstName?.at(0)}{$lastNameForm.lastName?.at(0)}
 					</Avatar.Fallback>
 				</Avatar>
+				<button
+					onclick={() => (avatarEdit = !avatarEdit)}
+					class="absolute -right-4 -bottom-1 btn-icon btn rounded-full preset-filled-surface-300-700 p-1.5"
+				>
+					<Pen size={24} />
+				</button>
 			</div>
 		</header>
 		<article class="p-4 pb-8">
@@ -68,11 +75,9 @@
 				<h2 class="py-4 text-right h6">
 					<span>Profile</span>
 				</h2>
-				<AvatarUpload {id} {data} {isSelf} {iconSize} />
-				<div class="flex gap-2">
-					<FirstName {id} {data} {isSelf} {iconSize} />
-					<LastName {id} {data} {isSelf} {iconSize} />
-				</div>
+				<AvatarUpload {id} {data} {avatarEdit} {isSelf} {iconSize} />
+				<FirstName {id} {data} {isSelf} {iconSize} />
+				<LastName {id} {data} {isSelf} {iconSize} />
 				<Phone {id} {data} {isSelf} {iconSize} />
 				<div class="py-4">
 					<Bio {id} {data} {isSelf} />
