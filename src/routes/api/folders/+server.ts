@@ -11,7 +11,7 @@ const isSafeTarget = (target: string): boolean => {
 	if (!target) return false;
 	if (target.includes('\0')) return false;
 	if (target.includes('..')) return false;
-	// allow simple route group paths like "(auth)" or "(dash)/users"
+	// allow simple route group paths like "(dash)" or "(public)"
 	if (!/^[a-zA-Z0-9_()\-/]+$/.test(target)) return false;
 
 	return ALLOWED_ROOTS.some((root) => target === root || target.startsWith(`${root}/`));
