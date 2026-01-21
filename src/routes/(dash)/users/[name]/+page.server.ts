@@ -104,8 +104,11 @@ export const actions: Actions = {
 			const message = error instanceof Error ? error.message : String(error);
 			return setFlash({ type: 'error', message }, event.cookies);
 		}
-
-		setFlash({ type: 'success', message: `Email updated.` }, event.cookies);
+		
+		const message = emailPublic
+			? `Public email set to "${emailPublic}".`
+			: 'Public email removed.';
+		setFlash({ type: 'success', message }, event.cookies);
 	},
 	active: async (event) => {
 		const activeForm = await superValidate(event.request, valibot(activeUserSchema));
@@ -128,7 +131,8 @@ export const actions: Actions = {
 			return setFlash({ type: 'error', message }, event.cookies);
 		}
 
-		setFlash({ type: 'success', message: `User updated.` }, event.cookies);
+		const message = active ? 'User activated.' : 'User deactivated.';
+		setFlash({ type: 'success', message }, event.cookies);
 	},
 	role: async (event) => {
 		const roleForm = await superValidate(event.request, valibot(roleUserSchema));
@@ -151,7 +155,8 @@ export const actions: Actions = {
 			return setFlash({ type: 'error', message }, event.cookies);
 		}
 
-		setFlash({ type: 'success', message: `User updated.` }, event.cookies);
+		const message = `User role set to "${role}".`;
+		setFlash({ type: 'success', message }, event.cookies);
 	},
 	delete: async (event) => {
 		const deleteForm = await superValidate(event.request, valibot(userIdSchema));
@@ -171,6 +176,6 @@ export const actions: Actions = {
 			return setFlash({ type: 'error', message }, event.cookies);
 		}
 
-		redirect('/users', { type: 'success', message: 'User deleted!' }, event.cookies);
+		redirect('/users', { type: 'success', message: 'User deleted successfully.' }, event.cookies);
 	}
 };
