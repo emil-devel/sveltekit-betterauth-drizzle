@@ -18,16 +18,14 @@
 
 	const flash = getFlash(page);
 
-	const ms: number = 4000;
-
 	$effect(() => {
 		if (!$flash) return;
 
 		const t = String($flash.type);
-		if (t === 'error') toaster.error({ description: $flash.message, duration: ms });
-		if (t === 'warning') toaster.warning({ description: $flash.message, duration: ms });
-		if (t === 'success') toaster.success({ description: $flash.message, duration: ms });
-		if (t === 'info') toaster.info({ description: $flash.message, duration: ms });
+		if (t === 'error') toaster.error({ description: $flash.message });
+		if (t === 'warning') toaster.warning({ description: $flash.message });
+		if (t === 'success') toaster.success({ description: $flash.message });
+		if (t === 'info') toaster.info({ description: $flash.message });
 
 		$flash = undefined;
 	});
