@@ -135,7 +135,7 @@ export const actions: Actions = {
 			return setFlash({ type: 'error', message }, event.cookies);
 		}
 
-		setFlash({ type: 'success', message: 'First name updated.' }, event.cookies);
+		setFlash({ type: 'success', message: `First name set to "${firstName}".` }, event.cookies);
 	},
 	lastName: async (event) => {
 		const formData = await event.request.formData();
@@ -163,7 +163,7 @@ export const actions: Actions = {
 			return setFlash({ type: 'error', message }, event.cookies);
 		}
 
-		setFlash({ type: 'success', message: 'Last name updated.' }, event.cookies);
+		setFlash({ type: 'success', message: `Last name set to "${lastName}".` }, event.cookies);
 	},
 	phone: async (event) => {
 		const formData = await event.request.formData();
@@ -213,6 +213,6 @@ export const actions: Actions = {
 			return setFlash({ type: 'error', message }, event.cookies);
 		}
 
-		setFlash({ type: 'success', message: 'Bio updated.' }, event.cookies);
+		setFlash({ type: 'success', message: 'Bio updated successfully.' }, event.cookies);
 	}
 };
