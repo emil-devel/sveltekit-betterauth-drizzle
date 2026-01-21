@@ -29,10 +29,10 @@
 			</a>
 		{/if}
 	</h2>
-	{#if page.data.session}
+	<!-- {#if page.data.session} -->
 		<nav class="flex-auto" aria-label="Hauptnavigation">
 			<ul class="flex items-center justify-center gap-4">
-				<li>
+				<!-- <li>
 					<a
 						class="btn preset-outlined-primary-200-800 btn-sm hover:preset-filled-primary-200-800"
 						class:preset-filled-primary-200-800={page.url.pathname === '/'}
@@ -42,11 +42,11 @@
 						<House size={iconSize} />
 						<span>Home</span>
 					</a>
-				</li>
+				</li> -->
 				<Nav targetOrdner={'(public)'} />
 			</ul>
 		</nav>
-	{/if}
+	<!-- {/if} -->
 	<div>
 		{#if page.data.session}
 			<Popover>
