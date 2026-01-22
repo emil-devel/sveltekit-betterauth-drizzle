@@ -62,12 +62,13 @@
 						{$firstNameForm.firstName?.at(0)}{$lastNameForm.lastName?.at(0)}
 					</Avatar.Fallback>
 				</Avatar>
-				<button
-					onclick={() => (avatarEdit = !avatarEdit)}
-					class="absolute -right-4 -bottom-1 btn-icon btn rounded-full preset-filled-surface-300-700 p-1.5"
-				>
-					<Pen size={24} />
-				</button>
+				{#if isSelf}
+					<button
+						onclick={() => (avatarEdit = !avatarEdit)}
+						class="absolute -right-4 -bottom-1 btn-icon btn rounded-full preset-filled-surface-300-700 p-1.5"
+						><Pen size={24} />
+					</button>
+				{/if}
 			</div>
 		</header>
 		<article class="p-4 pb-8">
