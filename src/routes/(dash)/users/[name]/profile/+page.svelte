@@ -20,7 +20,7 @@
 	// Forms
 	const { form: avatarForm } = superForm(data.avatarForm, { warnings: { duplicateId: false } });
 	const { form: firstNameForm } = superForm(data.firstNameForm, {
-		warnings: { duplicateId: false }
+		warnings: { duplicateId: false },
 	});
 	const { form: lastNameForm } = superForm(data.lastNameForm, { warnings: { duplicateId: false } });
 
@@ -39,12 +39,8 @@
 </svelte:head>
 
 <section class="m-auto max-w-md space-y-4">
-	<div
-		class="divide-y divide-surface-200-800 card border border-surface-200-800 preset-filled-surface-100-900"
-	>
-		<header
-			class="flex flex-row-reverse items-center justify-between gap-4 preset-filled-secondary-300-700 p-4"
-		>
+	<div class="divide-y divide-surface-200-800 card border border-surface-200-800 preset-filled-surface-100-900">
+		<header class="flex flex-row-reverse items-center justify-between gap-4 preset-filled-secondary-300-700 p-4">
 			<h1 class="h4">
 				{#if isSelf}
 					<UserRoundPen size={32} />
@@ -63,9 +59,7 @@
 					</Avatar.Fallback>
 				</Avatar>
 				{#if isSelf}
-					<button
-						onclick={() => (avatarEdit = !avatarEdit)}
-						class="absolute -right-4 -bottom-1 btn-icon btn rounded-full preset-filled-surface-300-700 p-1.5"
+					<button onclick={() => (avatarEdit = !avatarEdit)} class="absolute -right-4 -bottom-1 btn-icon btn rounded-full preset-filled-surface-300-700 p-1.5"
 						><Pen size={24} />
 					</button>
 				{/if}

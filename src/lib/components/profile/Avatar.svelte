@@ -5,7 +5,7 @@
 	import { profileAvatarSchema } from '$lib/valibot';
 	import { scale, slide } from 'svelte/transition';
 	import { flip } from 'svelte/animate';
-	import { ImagePlus, Trash, UserRoundPen, X } from '@lucide/svelte';
+	import { ImagePlus, Trash, X } from '@lucide/svelte';
 
 	let props = $props();
 	let { id, data, isSelf, iconSize } = $state(props);
@@ -14,10 +14,10 @@
 	const {
 		enhance: avatarEnhance,
 		errors: avatarErrors,
-		form: avatarForm
+		form: avatarForm,
 	} = superForm(data.avatarForm, {
 		validators: valibot(profileAvatarSchema),
-		validationMethod: 'onblur'
+		validationMethod: 'onblur',
 	});
 
 	const errorsAvatar = $derived(($avatarErrors.avatar ?? []) as string[]);
@@ -107,7 +107,7 @@
 								avatarFormEl?.reset();
 							}, 0);
 						}
-					}
+					},
 				}}
 			>
 				<input type="hidden" name="id" value={id} />
@@ -116,32 +116,18 @@
 					<div class="relative flex items-center justify-center">
 						{#if avatarPreview || $avatarForm.avatar}
 							{#key avatarPreview && avatarPreview.length > 0 ? avatarPreview : $avatarForm.avatar}
-								<img
-									src={avatarPreview && avatarPreview.length > 0
-										? avatarPreview
-										: $avatarForm.avatar}
-									alt="Avatar Preview"
-									class="max-w-full object-cover"
-								/>
+								<img src={avatarPreview && avatarPreview.length > 0 ? avatarPreview : $avatarForm.avatar} alt="Avatar Preview" class="max-w-full object-cover" />
 							{/key}
 							{#if !avatarPreview && $avatarForm.avatar}
 								{#if avatarDelete}
 									<div class="absolute top-1 left-0 w-full" transition:scale>
 										<p class="text-center">Really delete?</p>
 										<div class="flex justify-center gap-2">
-											<button
-												class="mt-2 btn preset-filled-error-300-700 btn-sm"
-												type="submit"
-												onclick={() => (avatarDelete = false)}
-											>
+											<button class="mt-2 btn preset-filled-error-300-700 btn-sm" type="submit" onclick={() => (avatarDelete = false)}>
 												<Trash size={iconSize} />
 												<span>Yes, Remove</span>
 											</button>
-											<button
-												class="mt-2 btn preset-filled-surface-300-700 btn-sm"
-												type="button"
-												onclick={() => (avatarDelete = false)}
-											>
+											<button class="mt-2 btn preset-filled-surface-300-700 btn-sm" type="button" onclick={() => (avatarDelete = false)}>
 												<X size={iconSize} />
 												<span>Cancel</span>
 											</button>
@@ -195,11 +181,7 @@
 		{#if avatarPreview && errorsAvatar.length > 0}
 			<div class="mx-auto max-w-xs space-y-1.5 text-center text-sm" aria-live="polite">
 				{#each errorsAvatar as message, i (i)}
-					<p
-						class="card preset-filled-error-300-700 p-2"
-						transition:slide={{ duration: 140 }}
-						animate:flip={{ duration: 160 }}
-					>
+					<p class="card preset-filled-error-300-700 p-2" transition:slide={{ duration: 140 }} animate:flip={{ duration: 160 }}>
 						{message}
 					</p>
 				{/each}

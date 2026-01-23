@@ -10,11 +10,7 @@
 	let { id, isSelf, iconSize } = props;
 	let data = $state(props.data);
 
-	const {
-		enhance: lastNameEnhance,
-		form: lastNameForm,
-		errors: lastNameErrors
-	} = superForm(data.lastNameForm, { validators: valibot(profileLastNameSchema) });
+	const { enhance: lastNameEnhance, form: lastNameForm, errors: lastNameErrors } = superForm(data.lastNameForm, { validators: valibot(profileLastNameSchema) });
 
 	const errorsLastName = $derived(($lastNameErrors.lastName ?? []) as string[]);
 
@@ -42,6 +38,7 @@
 						lastNameEdit = false;
 					}
 				}}
+				id="lastName"
 				spellcheck="false"
 			/>
 		</div>
@@ -49,11 +46,7 @@
 	{#if errorsLastName && $lastNameForm.lastName}
 		<div class="mx-auto max-w-xs space-y-1.5 text-center text-sm" aria-live="polite">
 			{#each errorsLastName as message, i (i)}
-				<p
-					class="card preset-filled-error-300-700 p-2"
-					transition:slide={{ duration: 140 }}
-					animate:flip={{ duration: 160 }}
-				>
+				<p class="card preset-filled-error-300-700 p-2" transition:slide={{ duration: 140 }} animate:flip={{ duration: 160 }}>
 					{message}
 				</p>
 			{/each}

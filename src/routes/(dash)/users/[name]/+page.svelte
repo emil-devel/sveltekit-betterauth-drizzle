@@ -8,38 +8,20 @@
 	import { Avatar, Switch } from '@skeletonlabs/skeleton-svelte';
 	import { scale, slide } from 'svelte/transition';
 	import { flip } from 'svelte/animate';
-	import {
-		ArrowBigLeft,
-		Mail,
-		MailX,
-		UserRoundCheck,
-		UserRoundPen,
-		UserRoundX
-	} from '@lucide/svelte';
+	import { ArrowBigLeft, Mail, MailX, UserRoundCheck, UserRoundPen, UserRoundX } from '@lucide/svelte';
 	const iconSize: number = 16;
 
 	let props: PageProps = $props();
 	let data = $state(props.data);
 
-	const {
-		id,
-		name,
-		image,
-		avatar,
-		email,
-		emailVerified,
-		createdAt,
-		firstName,
-		lastName,
-		updatedAt
-	} = data;
+	const { id, name, image, avatar, email, emailVerified, createdAt, firstName, lastName, updatedAt } = data;
 	const {
 		enhance: emailEnhance,
 		errors: emailErrors,
-		form: emailForm
+		form: emailForm,
 	} = superForm(data.emailForm, {
 		validators: valibot(userEmailSchema),
-		validationMethod: 'oninput'
+		validationMethod: 'oninput',
 	});
 	const { enhance: activeEnhance, form: activeForm } = superForm(data.activeForm);
 	const { enhance: roleEnhance, form: roleForm } = superForm(data.roleForm);
@@ -62,9 +44,7 @@
 </svelte:head>
 
 <section class="m-auto max-w-sm space-y-4">
-	<div
-		class="block max-w-md divide-y divide-surface-200-800 card border border-surface-200-800 preset-filled-surface-100-900"
-	>
+	<div class="block max-w-md divide-y divide-surface-200-800 card border border-surface-200-800 preset-filled-surface-100-900">
 		<header
 			class="flex flex-row-reverse items-center justify-between gap-4 p-4"
 			class:preset-filled-success-300-700={$activeForm.active && $roleForm.role === 'USER'}
@@ -128,23 +108,13 @@
 							<div class="ig-cell preset-tonal py-1.5">
 								<Mail size={iconSize} />
 							</div>
-							<input
-								class="ig-input text-sm"
-								type="email"
-								name="emailPublic"
-								bind:value={$emailForm.emailPublic}
-								spellcheck="false"
-							/>
+							<input class="ig-input text-sm" type="email" name="emailPublic" bind:value={$emailForm.emailPublic} id="emailPublic" spellcheck="false" />
 							<button class="ig-btn preset-tonal btn-sm" type="submit"> Submit </button>
 						</div>
 					</form>
 					<div class="mx-auto max-w-xs space-y-1.5 text-center text-sm" aria-live="polite">
 						{#each errorsEmail as message, i (i)}
-							<p
-								class="card preset-filled-error-300-700 p-2"
-								transition:slide={{ duration: 140 }}
-								animate:flip={{ duration: 160 }}
-							>
+							<p class="card preset-filled-error-300-700 p-2" transition:slide={{ duration: 140 }} animate:flip={{ duration: 160 }}>
 								{message}
 							</p>
 						{/each}
@@ -182,13 +152,14 @@
 						</form>
 						<form method="post" action="?/role" use:roleEnhance>
 							<input class="input" type="hidden" name="id" value={id} />
-							<label class="label">
+							<label class="label" for="role-select">
 								<span class="label-text">Role</span>
 								<select
 									onchange={(e) => (e.currentTarget as HTMLSelectElement).form?.requestSubmit()}
 									bind:value={$roleForm.role}
 									class="select w-fit text-sm lowercase"
 									name="role"
+									id="role-select"
 								>
 									{#each ROLES as role}
 										<option value={role}>{role}</option>
@@ -202,39 +173,17 @@
 			{#if viewerRole === 'ADMIN' && viewerId !== id}
 				<div class="mt-8 h-16 overflow-y-hidden border-t border-surface-200-800 py-8">
 					{#if deleteConfirm}
-						<div
-							class="flex items-center justify-center gap-2"
-							out:scale={{ delay: 0, duration: 300 }}
-							in:scale={{ delay: 300, duration: 300 }}
-						>
+						<div class="flex items-center justify-center gap-2" out:scale={{ delay: 0, duration: 300 }} in:scale={{ delay: 300, duration: 300 }}>
 							<span class="pr-4">Really delete the user?</span>
-							<button
-								class="btn preset-filled-surface-300-700 btn-sm"
-								onclick={() => (deleteConfirm = false)}>Cancel</button
-							>
+							<button class="btn preset-filled-surface-300-700 btn-sm" onclick={() => (deleteConfirm = false)}>Cancel</button>
 							<form method="post" action="?/delete" use:deleteEnhance>
 								<input type="hidden" name="id" value={id} />
-								<button
-									class="btn preset-filled-error-300-700 btn-sm"
-									type="submit"
-									onclick={() => (deleteConfirm = false)}
-								>
-									Delete
-								</button>
+								<button class="btn preset-filled-error-300-700 btn-sm" type="submit" onclick={() => (deleteConfirm = false)}> Delete </button>
 							</form>
 						</div>
 					{:else}
-						<div
-							class="flex justify-center"
-							out:scale={{ delay: 0, duration: 300 }}
-							in:scale={{ delay: 300, duration: 300 }}
-						>
-							<button
-								onclick={() => (deleteConfirm = true)}
-								class="btn preset-outlined-error-300-700 btn-sm"
-							>
-								Delete
-							</button>
+						<div class="flex justify-center" out:scale={{ delay: 0, duration: 300 }} in:scale={{ delay: 300, duration: 300 }}>
+							<button onclick={() => (deleteConfirm = true)} class="btn preset-outlined-error-300-700 btn-sm"> Delete </button>
 						</div>
 					{/if}
 				</div>
