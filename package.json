@@ -11,6 +11,7 @@
 		"drizzle",
 		"postgres"
 	],
+	"description": "User management with Better-Auth authentication and Roles (User, Redacteur, Admin). Realized with: Sveltekit, Skeleton UI, SuperForms, Valibot, Prisma, Postgres Database.",
 	"type": "module",
 	"scripts": {
 		"dev": "vite dev",
