@@ -1,24 +1,7 @@
 {
-  "servers": {
-    "svelte": {
-      "url": "https://mcp.svelte.dev/mcp",
-      "type": "http"
-    },
-    "skeleton": {
-      "url": "https://www.skeleton.dev/llms-svelte.txt",
-      "type": "http"
-    },
-    "drizzle": {
-      "url": "https://orm.drizzle.team/llms.txt",
-      "type": "http"
-    },
-    "valibot": {
-      "url": "https://valibot.dev/llms-full.txt",
-      "type": "http"
-    },
-    "better-auth": {
-      "url": "https://mcp.chonkie.ai/better-auth/better-auth-builder/mcp",
-      "type": "http"
-    }
-  }
+	"servers": {
+		"svelte": {
+			"url": "https://mcp.svelte.dev/mcp"
+		}
+	}
 }
