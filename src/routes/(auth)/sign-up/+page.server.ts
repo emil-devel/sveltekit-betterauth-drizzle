@@ -1,14 +1,14 @@
 import type { Actions, PageServerLoad } from './$types';
-import { APIError } from 'better-auth/api';
 import { auth } from '$lib/auth';
-import { registerSchema } from '$lib/valibot';
-import { valibot } from 'sveltekit-superforms/adapters';
-import { fail, setError, superValidate } from 'sveltekit-superforms';
-import { redirect } from 'sveltekit-flash-message/server';
+import { sanitizeFormData } from '$lib/sanitizer';
 import { db } from '$lib/server/db';
 import * as table from '$lib/server/db/schema';
+import { registerSchema } from '$lib/valibot';
+import { APIError } from 'better-auth/api';
 import { eq } from 'drizzle-orm';
-import { sanitizeFormData } from '$lib/sanitizer';
+import { redirect } from 'sveltekit-flash-message/server';
+import { fail, setError, superValidate } from 'sveltekit-superforms';
+import { valibot } from 'sveltekit-superforms/adapters';
 
 export const load = (async () => {
 	const form = await superValidate(valibot(registerSchema));
@@ -37,27 +37,24 @@ export const actions: Actions = {
 
 		try {
 			const res = await auth.api.signUpEmail({
-				body: { name, email, password, image }
+				body: { name, email, password, image },
 			});
 
 			const userId = res?.user?.id;
 			if (!userId) {
 				return fail(500, {
 					form,
-					message: 'User was created, but profile could not be initialized.'
+					message: 'User was created, but profile could not be initialized.',
 				});
 			}
 
-			await db
-				.insert(table.profile)
-				.values({ userId, name })
-				.onConflictDoNothing({ target: table.profile.userId });
+			await db.insert(table.profile).values({ id: crypto.randomUUID(), userId, name }).onConflictDoNothing({ target: table.profile.userId });
 		} catch (error) {
 			if (error instanceof APIError) {
 				return fail(500, {
 					form,
 					message: 'An error has occurred while creating the user.',
-					error: String(error)
+					error: String(error),
 				});
 			}
 
@@ -69,9 +66,9 @@ export const actions: Actions = {
 			'/',
 			{
 				type: 'success',
-				message: 'You are now registered and need to verify your email before logging in.'
+				message: 'You are now registered and need to verify your email before logging in.',
 			},
 			event
 		);
-	}
+	},
 };
