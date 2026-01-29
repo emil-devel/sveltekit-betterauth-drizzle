@@ -125,7 +125,6 @@
 			{#if countUser > 5}
 				<div class="flex-auto">
 					<Pagination
-						class="flex-auto"
 						count={filteredUsers.length}
 						pageSize={PAGE_SIZE}
 						{page}
