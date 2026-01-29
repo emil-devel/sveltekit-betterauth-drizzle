@@ -50,7 +50,7 @@
 		"prettier": "^3.8.1",
 		"prettier-plugin-svelte": "^3.4.1",
 		"prettier-plugin-tailwindcss": "^0.7.2",
-		"svelte": "^5.48.3",
+		"svelte": "^5.49.0",
 		"svelte-check": "^4.3.5",
 		"sveltekit-flash-message": "^2.4.6",
 		"sveltekit-superforms": "^2.29.1",
@@ -62,9 +62,9 @@
 		"vite-plugin-devtools-json": "^1.0.0"
 	},
 	"dependencies": {
-		"@friendofsvelte/tipex": "^0.1.0",
-		"better-auth": "^1.4.17",
-		"nodemailer": "^7.0.12",
+		"@friendofsvelte/tipex": "^0.1.1",
+		"better-auth": "^1.4.18",
+		"nodemailer": "^7.0.13",
 		"postgres": "^3.4.8"
 	}
 }
