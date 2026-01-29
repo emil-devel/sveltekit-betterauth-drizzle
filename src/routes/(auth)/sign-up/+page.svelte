@@ -11,20 +11,10 @@
 	let data = $state(props.data);
 
 	const { enhance, errors, form } = superForm(data.form, {
-		validators: valibot(registerSchema)
+		validators: valibot(registerSchema),
 	});
 
-	const formErrors = $derived(
-		(
-			[
-				$errors.name ?? [],
-				$errors.email ?? [],
-				$errors.password ?? [],
-				$errors.passwordConfirm ?? [],
-				$errors._errors ?? []
-			] as string[][]
-		).flat()
-	);
+	const formErrors = $derived(([$errors.name ?? [], $errors.email ?? [], $errors.password ?? [], $errors.passwordConfirm ?? [], $errors._errors ?? []] as string[][]).flat());
 </script>
 
 <svelte:head>
@@ -39,7 +29,7 @@
 	</h1>
 	<form class="space-y-4 py-4" method="post" use:enhance>
 		<fieldset class="space-y-2">
-			<label class="input-group grid-cols-[auto_1fr_auto]">
+			<label class="input-group grid-cols-[auto_1fr_auto]" for="email">
 				<div class="ig-cell preset-tonal" class:text-error-500={$errors.email}>
 					<Mail size="16" />
 				</div>
@@ -52,11 +42,12 @@
 					onblur={() => ($form.email = ($form.email ?? '').trim().toLowerCase())}
 					aria-invalid={$errors.email ? 'true' : undefined}
 					placeholder="email"
+					id="email"
 					spellcheck="false"
 					required
 				/>
 			</label>
-			<label class="input-group grid-cols-[auto_1fr_auto]">
+			<label class="input-group grid-cols-[auto_1fr_auto]" for="name">
 				<div class="ig-cell preset-tonal" class:text-error-500={$errors.name}>
 					<UserRound size="16" />
 				</div>
@@ -69,11 +60,12 @@
 					onblur={() => ($form.name = ($form.name ?? '').trim().toLowerCase())}
 					aria-invalid={$errors.name ? 'true' : undefined}
 					placeholder="username"
+					id="name"
 					spellcheck="false"
 					required
 				/>
 			</label>
-			<label class="input-group grid-cols-[auto_1fr_auto]">
+			<label class="input-group grid-cols-[auto_1fr_auto]" for="password">
 				<div class="ig-cell preset-tonal" class:text-error-500={$errors.password}>
 					<Lock size="16" />
 				</div>
@@ -84,10 +76,11 @@
 					name="password"
 					aria-invalid={$errors.password ? 'true' : undefined}
 					placeholder="password"
+					id="password"
 					required
 				/>
 			</label>
-			<label class="input-group grid-cols-[auto_1fr_auto]">
+			<label class="input-group grid-cols-[auto_1fr_auto]" for="passwordConfirm">
 				<div class="ig-cell preset-tonal" class:text-error-500={$errors._errors?.[0]}>
 					<LockOpen size="16" />
 				</div>
@@ -98,17 +91,14 @@
 					name="passwordConfirm"
 					aria-invalid={$errors.passwordConfirm ? 'true' : undefined}
 					placeholder="password confirm"
+					id="passwordConfirm"
 					required
 				/>
 			</label>
 		</fieldset>
 		<div class="mx-auto max-w-xs space-y-1.5 text-center text-sm" aria-live="polite">
 			{#each formErrors as message, i (i)}
-				<p
-					class="card preset-filled-error-300-700 p-2"
-					transition:slide={{ duration: 140 }}
-					animate:flip={{ duration: 160 }}
-				>
+				<p class="card preset-filled-error-300-700 p-2" transition:slide={{ duration: 140 }} animate:flip={{ duration: 160 }}>
 					{message}
 				</p>
 			{/each}
@@ -118,9 +108,7 @@
 				<button class="btn w-full preset-filled-primary-300-700" type="submit">
 					<span>Sign Up</span>
 				</button>
-				<p
-					class="my-2 flex items-center justify-center gap-1 border-t-[.1rem] border-t-primary-200-800 py-1 text-xs"
-				>
+				<p class="my-2 flex items-center justify-center gap-1 border-t-[.1rem] border-t-primary-200-800 py-1 text-xs">
 					<span>Have Account?</span>
 					<ArrowRight size="12" />
 					<a href="/sign-in" class="anchor">Sign In</a>

@@ -12,7 +12,7 @@
 	let data = $state(props.data);
 
 	const { enhance, errors, form } = superForm(data.form, {
-		validators: valibot(loginSchema)
+		validators: valibot(loginSchema),
 	});
 
 	const formErrors = $derived(([$errors.email ?? [], $errors.password ?? []] as string[][]).flat());
@@ -32,7 +32,7 @@
 			class="btn w-full preset-filled-surface-200-800 btn-sm"
 			onclick={async () => {
 				await signIn.social({
-					provider: 'github'
+					provider: 'github',
 				});
 			}}
 		>
@@ -43,7 +43,7 @@
 			class="btn w-full preset-filled-surface-200-800 btn-sm"
 			onclick={async () => {
 				await signIn.social({
-					provider: 'google'
+					provider: 'google',
 				});
 			}}
 		>
@@ -54,7 +54,7 @@
 	</div>
 	<form class="space-y-4 py-4" method="post" use:enhance>
 		<fieldset class="space-y-2">
-			<label class="input-group grid-cols-[auto_1fr_auto]">
+			<label class="input-group grid-cols-[auto_1fr_auto]" for="email">
 				<div class="ig-cell preset-tonal" class:text-error-500={$errors.email}>
 					<Mail size="16" />
 				</div>
@@ -67,11 +67,12 @@
 					onblur={() => ($form.email = ($form.email ?? '').trim().toLowerCase())}
 					aria-invalid={$errors.email ? true : undefined}
 					placeholder="email"
+					id="email"
 					spellcheck="false"
 					required
 				/>
 			</label>
-			<label class="input-group grid-cols-[auto_1fr_auto]">
+			<label class="input-group grid-cols-[auto_1fr_auto]" for="password">
 				<div class="ig-cell preset-tonal" class:text-error-500={$errors.password}>
 					<Lock size="16" />
 				</div>
@@ -82,6 +83,7 @@
 					name="password"
 					aria-invalid={$errors.password ? true : undefined}
 					placeholder="password"
+					id="password"
 					required
 				/>
 			</label>
@@ -98,9 +100,7 @@
 				<button class="btn w-full preset-filled-primary-300-700" type="submit">
 					<span>Sign In</span>
 				</button>
-				<p
-					class="my-2 flex items-center justify-center gap-1 border-t-[.1rem] border-t-primary-200-800 py-1 text-xs"
-				>
+				<p class="my-2 flex items-center justify-center gap-1 border-t-[.1rem] border-t-primary-200-800 py-1 text-xs">
 					<span>Haven't Account?</span>
 					<ArrowRight size="12" />
 					<a href="/sign-up" class="anchor">Sign Up</a>
