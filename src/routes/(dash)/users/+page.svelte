@@ -1,12 +1,18 @@
 <script lang="ts">
 	import type { PageProps } from './$types';
 	import { Avatar, Pagination } from '@skeletonlabs/skeleton-svelte';
+	import { resolve } from '$app/paths';
 	import { ArrowLeft, ArrowRight, Check, UsersRound, X } from '@lucide/svelte';
 
 	let props: PageProps = $props();
 	let data = $state(props.data);
 
 	let { users } = data;
+
+	type PaginationPage =
+		| { type: 'page'; value: number }
+		| { type: 'ellipsis'; key?: string | number };
+	type PaginationContext = { pages: PaginationPage[] };
 
 	let role: string = $state('');
 	let search: string = $state('');
@@ -84,7 +90,7 @@
 				<dd class="my-2 card preset-filled-surface-100-900 card-hover">
 					<a
 						class="grid grid-cols-5 items-center border-r-[.25em] border-l-[.25em] border-surface-100-900 py-2 text-center hover:border-primary-300-700"
-						href="/users/{user.name}"
+						href={resolve(`/users/${user.name}`)}
 					>
 						<Avatar class="h-10 w-10 text-xs">
 							<Avatar.Image
@@ -134,7 +140,7 @@
 							<ArrowLeft class="size-4" />
 						</Pagination.PrevTrigger>
 						<Pagination.Context>
-							{#snippet children(pagination: any)}
+							{#snippet children(pagination: () => PaginationContext)}
 								{#each pagination().pages as page, index (page)}
 									{#if page.type === 'page'}
 										<Pagination.Item {...page}>

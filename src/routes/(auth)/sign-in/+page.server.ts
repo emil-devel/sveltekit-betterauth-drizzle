@@ -72,7 +72,7 @@ export const actions: Actions = {
 
 				if (isEmailNotVerified) {
 					return setError(form, 'email', 'Please verify your email before signing in.', {
-						status: 403
+						status: 403,
 					});
 				}
 
@@ -80,7 +80,7 @@ export const actions: Actions = {
 				return fail(500, {
 					form,
 					message: 'An error has occurred while logging the user.',
-					error: message
+					error: message,
 				});
 			}
 
@@ -88,5 +88,5 @@ export const actions: Actions = {
 		}
 
 		throw redirect(303, '/', { type: 'info', message: 'You successfully logged in.' }, event);
-	}
+	},
 };

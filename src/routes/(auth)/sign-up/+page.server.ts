@@ -48,7 +48,10 @@ export const actions: Actions = {
 				});
 			}
 
-			await db.insert(table.profile).values({ id: crypto.randomUUID(), userId, name }).onConflictDoNothing({ target: table.profile.userId });
+			await db
+				.insert(table.profile)
+				.values({ id: crypto.randomUUID(), userId, name })
+				.onConflictDoNothing({ target: table.profile.userId });
 		} catch (error) {
 			if (error instanceof APIError) {
 				return fail(500, {

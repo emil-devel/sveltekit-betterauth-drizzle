@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { profileBioSchema } from '$lib/valibot';
-	import { Tipex } from '@friendofsvelte/tipex';
+	import { Tipex, type TipexEditor } from '@friendofsvelte/tipex';
 	import { superForm } from 'sveltekit-superforms';
 	import { valibot } from 'sveltekit-superforms/adapters';
+	import { fromAction } from 'svelte/attachments';
 
 	let props = $props();
 	let { id, isSelf } = props;
@@ -16,35 +17,46 @@
 	// Tipex editor setup
 	// Initial HTML content from server form
 	let body = $state($bioForm.bio ?? '');
-	// Editor instance binding (use a permissive type to avoid tiptap version type mismatches)
-	let editor = $state<any>();
+	// Editor instance binding
+	let editor = $state<TipexEditor>();
 	// Always up-to-date HTML extracted from the editor
 	const htmlContent = $derived.by(() => editor?.getHTML() ?? body);
+	const plainText = $derived.by(() => (htmlContent ?? '').replace(/<[^>]*>/g, '').trim());
+	const bioEnhanceAttachment = fromAction(bioEnhance);
 
 	// Keep superform field in sync so JSON submission includes latest HTML
 	$effect(() => {
-		if (editor) {
-			const current = editor.getHTML();
-			if (current !== $bioForm.bio) {
-				$bioForm.bio = current;
-			}
+		if (!editor) return;
+		if (htmlContent !== $bioForm.bio) {
+			$bioForm.bio = htmlContent;
 		}
 	});
 </script>
 
 {#if isSelf}
-	<form class="flex items-baseline justify-between gap-4 pb-1" method="post" action="?/bio" use:bioEnhance>
+	<form
+		class="flex items-baseline justify-between gap-4 pb-1"
+		method="post"
+		action="?/bio"
+		{@attach bioEnhanceAttachment}
+	>
 		<input class="input" type="hidden" name="id" value={id} />
 		<span class="label-text">Bio</span>
 		<!-- bio value provided via superforms JSON (kept in sync in script) -->
 		<button class="btn preset-tonal btn-sm" type="submit"> Submit </button>
 	</form>
 	<div class="pb-4">
-		<Tipex body={$bioForm.bio} bind:tipex={editor} floating focal class="h-[40vh] border border-surface-200-800" />
+		<Tipex
+			body={$bioForm.bio}
+			bind:tipex={editor}
+			floating
+			focal
+			class="h-[40vh] border border-surface-200-800"
+		/>
 	</div>
 {:else}
 	<h3 class="label-text">Bio</h3>
 	<div class="prose border border-surface-200-800 p-2 prose-invert">
-		{@html htmlContent}
+		{plainText}
 	</div>
 {/if}

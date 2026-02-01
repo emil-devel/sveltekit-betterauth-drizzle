@@ -14,7 +14,15 @@ const transporter = nodemailer.createTransport({
 	// },
 } as SMTPTransport.Options);
 
-export async function sendEmail({ to, subject, text }: { to: string; subject: string; text: string }) {
+export async function sendEmail({
+	to,
+	subject,
+	text,
+}: {
+	to: string;
+	subject: string;
+	text: string;
+}) {
 	try {
 		await transporter.sendMail({
 			from: SEND_MAIL_FROM as string,

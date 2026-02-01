@@ -1,9 +1,3 @@
-<script lang="ts">
-	import type { PageServerData } from './$types';
-
-	let { data }: { data: PageServerData } = $props();
-</script>
-
 <svelte:head>
 	<title>Startpage - SvelteKit BetterAuth Drizzle</title>
 	<meta

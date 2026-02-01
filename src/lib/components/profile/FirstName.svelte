@@ -10,7 +10,11 @@
 	let { id, isSelf, iconSize } = props;
 	let data = $state(props.data);
 
-	const { enhance: firstNameEnhance, form: firstNameForm, errors: firstNameErrors } = superForm(data.firstNameForm, { validators: valibot(profileFirstNameSchema) });
+	const {
+		enhance: firstNameEnhance,
+		form: firstNameForm,
+		errors: firstNameErrors,
+	} = superForm(data.firstNameForm, { validators: valibot(profileFirstNameSchema) });
 
 	const errorsFirstName = $derived(($firstNameErrors.firstName ?? []) as string[]);
 
@@ -46,7 +50,11 @@
 	{#if errorsFirstName && $firstNameForm.firstName}
 		<div class="mx-auto max-w-xs space-y-1.5 text-center text-sm" aria-live="polite">
 			{#each errorsFirstName as message, i (i)}
-				<p class="card preset-filled-error-300-700 p-2" transition:slide={{ duration: 140 }} animate:flip={{ duration: 160 }}>
+				<p
+					class="card preset-filled-error-300-700 p-2"
+					transition:slide={{ duration: 140 }}
+					animate:flip={{ duration: 160 }}
+				>
 					{message}
 				</p>
 			{/each}

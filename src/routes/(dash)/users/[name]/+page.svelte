@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { PageProps } from './$types';
 	import { page } from '$app/state';
+	import { resolve } from '$app/paths';
 	import { ROLES } from '$lib/permissions';
 	import { superForm } from 'sveltekit-superforms';
 	import { valibot } from 'sveltekit-superforms/adapters';
@@ -8,13 +9,32 @@
 	import { Avatar, Switch } from '@skeletonlabs/skeleton-svelte';
 	import { scale, slide } from 'svelte/transition';
 	import { flip } from 'svelte/animate';
-	import { ArrowBigLeft, Mail, MailX, UserRoundCheck, UserRoundPen, UserRoundX } from '@lucide/svelte';
+	import { fromAction } from 'svelte/attachments';
+	import {
+		ArrowBigLeft,
+		Mail,
+		MailX,
+		UserRoundCheck,
+		UserRoundPen,
+		UserRoundX,
+	} from '@lucide/svelte';
 	const iconSize: number = 16;
 
 	let props: PageProps = $props();
 	let data = $state(props.data);
 
-	const { id, name, image, avatar, email, emailVerified, createdAt, firstName, lastName, updatedAt } = data;
+	const {
+		id,
+		name,
+		image,
+		avatar,
+		email,
+		emailVerified,
+		createdAt,
+		firstName,
+		lastName,
+		updatedAt,
+	} = data;
 	const {
 		enhance: emailEnhance,
 		errors: emailErrors,
@@ -28,11 +48,21 @@
 	const { enhance: deleteEnhance } = superForm(data.deleteForm);
 
 	const errorsEmail = $derived(($emailErrors.emailPublic ?? []) as string[]);
+	const emailEnhanceAttachment = fromAction(emailEnhance);
+	const activeEnhanceAttachment = fromAction(activeEnhance);
+	const roleEnhanceAttachment = fromAction(roleEnhance);
+	const deleteEnhanceAttachment = fromAction(deleteEnhance);
 
 	let deleteConfirm = $state(false);
 
 	// Form element reference for the active Switch; we update the superform store directly
 	let activeFormEl: HTMLFormElement | null = $state(null);
+	const activeFormAttachment = (node: HTMLFormElement) => {
+		activeFormEl = node;
+		return () => {
+			if (activeFormEl === node) activeFormEl = null;
+		};
+	};
 
 	const viewerId = $derived(page.data.authUser?.id ?? null);
 	const viewerRole = $derived(page.data.authUser?.role ?? null);
@@ -44,7 +74,9 @@
 </svelte:head>
 
 <section class="m-auto max-w-sm space-y-4">
-	<div class="block max-w-md divide-y divide-surface-200-800 card border border-surface-200-800 preset-filled-surface-100-900">
+	<div
+		class="block max-w-md divide-y divide-surface-200-800 card border border-surface-200-800 preset-filled-surface-100-900"
+	>
 		<header
 			class="flex flex-row-reverse items-center justify-between gap-4 p-4"
 			class:preset-filled-success-300-700={$activeForm.active && $roleForm.role === 'USER'}
@@ -101,20 +133,31 @@
 					</div>
 				{/if}
 				{#if viewerId === id}
-					<form method="post" action="?/email" use:emailEnhance>
+					<form method="post" action="?/email" {@attach emailEnhanceAttachment}>
 						<input class="input" type="hidden" name="id" value={id} />
 						<label class="label label-text" for="emailPublic">Public Email</label>
 						<div class="input-group grid-cols-[auto_1fr_auto]">
 							<div class="ig-cell preset-tonal py-1.5">
 								<Mail size={iconSize} />
 							</div>
-							<input class="ig-input text-sm" type="email" name="emailPublic" bind:value={$emailForm.emailPublic} id="emailPublic" spellcheck="false" />
+							<input
+								class="ig-input text-sm"
+								type="email"
+								name="emailPublic"
+								bind:value={$emailForm.emailPublic}
+								id="emailPublic"
+								spellcheck="false"
+							/>
 							<button class="ig-btn preset-tonal btn-sm" type="submit"> Submit </button>
 						</div>
 					</form>
 					<div class="mx-auto max-w-xs space-y-1.5 text-center text-sm" aria-live="polite">
 						{#each errorsEmail as message, i (i)}
-							<p class="card preset-filled-error-300-700 p-2" transition:slide={{ duration: 140 }} animate:flip={{ duration: 160 }}>
+							<p
+								class="card preset-filled-error-300-700 p-2"
+								transition:slide={{ duration: 140 }}
+								animate:flip={{ duration: 160 }}
+							>
 								{message}
 							</p>
 						{/each}
@@ -132,7 +175,12 @@
 				{/if}
 				{#if viewerRole === 'ADMIN' && viewerId !== id}
 					<div class="flex justify-between gap-4">
-						<form bind:this={activeFormEl} method="post" action="?/active" use:activeEnhance>
+						<form
+							method="post"
+							action="?/active"
+							{@attach activeEnhanceAttachment}
+							{@attach activeFormAttachment}
+						>
 							<input class="input" type="hidden" name="id" value={id} />
 							<div class="flex flex-col gap-2">
 								<Switch
@@ -150,7 +198,7 @@
 								</Switch>
 							</div>
 						</form>
-						<form method="post" action="?/role" use:roleEnhance>
+						<form method="post" action="?/role" {@attach roleEnhanceAttachment}>
 							<input class="input" type="hidden" name="id" value={id} />
 							<label class="label" for="role-select">
 								<span class="label-text">Role</span>
@@ -161,7 +209,7 @@
 									name="role"
 									id="role-select"
 								>
-									{#each ROLES as role}
+									{#each ROLES as role (role)}
 										<option value={role}>{role}</option>
 									{/each}
 								</select>
@@ -173,17 +221,39 @@
 			{#if viewerRole === 'ADMIN' && viewerId !== id}
 				<div class="mt-8 h-16 overflow-y-hidden border-t border-surface-200-800 py-8">
 					{#if deleteConfirm}
-						<div class="flex items-center justify-center gap-2" out:scale={{ delay: 0, duration: 300 }} in:scale={{ delay: 300, duration: 300 }}>
+						<div
+							class="flex items-center justify-center gap-2"
+							out:scale={{ delay: 0, duration: 300 }}
+							in:scale={{ delay: 300, duration: 300 }}
+						>
 							<span class="pr-4">Really delete the user?</span>
-							<button class="btn preset-filled-surface-300-700 btn-sm" onclick={() => (deleteConfirm = false)}>Cancel</button>
-							<form method="post" action="?/delete" use:deleteEnhance>
+							<button
+								class="btn preset-filled-surface-300-700 btn-sm"
+								onclick={() => (deleteConfirm = false)}>Cancel</button
+							>
+							<form method="post" action="?/delete" {@attach deleteEnhanceAttachment}>
 								<input type="hidden" name="id" value={id} />
-								<button class="btn preset-filled-error-300-700 btn-sm" type="submit" onclick={() => (deleteConfirm = false)}> Delete </button>
+								<button
+									class="btn preset-filled-error-300-700 btn-sm"
+									type="submit"
+									onclick={() => (deleteConfirm = false)}
+								>
+									Delete
+								</button>
 							</form>
 						</div>
 					{:else}
-						<div class="flex justify-center" out:scale={{ delay: 0, duration: 300 }} in:scale={{ delay: 300, duration: 300 }}>
-							<button onclick={() => (deleteConfirm = true)} class="btn preset-outlined-error-300-700 btn-sm"> Delete </button>
+						<div
+							class="flex justify-center"
+							out:scale={{ delay: 0, duration: 300 }}
+							in:scale={{ delay: 300, duration: 300 }}
+						>
+							<button
+								onclick={() => (deleteConfirm = true)}
+								class="btn preset-outlined-error-300-700 btn-sm"
+							>
+								Delete
+							</button>
 						</div>
 					{/if}
 				</div>
@@ -197,12 +267,15 @@
 		</footer>
 	</div>
 	<div class="mt-8 flex items-center justify-between gap-4 border-t border-surface-200-800 p-2">
-		<a class="btn preset-tonal btn-sm" href="/users">
+		<a class="btn preset-tonal btn-sm" href={resolve('/users')}>
 			<ArrowBigLeft size={iconSize} />
 			Users
 		</a>
 		{#if viewerId === id || viewerRole === 'ADMIN'}
-			<a class="btn preset-filled-secondary-300-700 btn-sm" href="/users/{name}/profile">
+			<a
+				class="btn preset-filled-secondary-300-700 btn-sm"
+				href={resolve(`/users/${name}/profile`)}
+			>
 				Profile
 				<UserRoundPen size={iconSize} />
 			</a>

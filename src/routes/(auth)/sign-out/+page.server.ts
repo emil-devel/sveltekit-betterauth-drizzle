@@ -5,7 +5,7 @@ import { redirect } from 'sveltekit-flash-message/server';
 export const load = (async (event) => {
 	await auth.api.signOut({
 		// This endpoint requires session cookies.
-		headers: event.request.headers
+		headers: event.request.headers,
 	});
 	throw redirect(
 		303,

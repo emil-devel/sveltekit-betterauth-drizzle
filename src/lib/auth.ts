@@ -1,5 +1,12 @@
 import { getRequestEvent } from '$app/server';
-import { BETTER_AUTH_SECRET, BETTER_AUTH_URL, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from '$env/static/private';
+import {
+	BETTER_AUTH_SECRET,
+	BETTER_AUTH_URL,
+	GITHUB_CLIENT_ID,
+	GITHUB_CLIENT_SECRET,
+	GOOGLE_CLIENT_ID,
+	GOOGLE_CLIENT_SECRET,
+} from '$env/static/private';
 import { sendEmail } from '$lib/nodemailer';
 import { db } from '$lib/server/db';
 import * as table from '$lib/server/db/schema';
@@ -109,7 +116,10 @@ export const auth = betterAuth({
 				},
 				after: async (user) => {
 					if (!user?.id || !user?.name) return;
-					await db.insert(table.profile).values({ id: crypto.randomUUID(), userId: user.id, name: user.name }).onConflictDoNothing({ target: table.profile.userId });
+					await db
+						.insert(table.profile)
+						.values({ id: crypto.randomUUID(), userId: user.id, name: user.name })
+						.onConflictDoNothing({ target: table.profile.userId });
 				},
 			},
 		},

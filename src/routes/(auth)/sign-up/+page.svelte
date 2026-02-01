@@ -1,11 +1,13 @@
 <script lang="ts">
 	import type { PageProps } from './$types';
 	import { registerSchema } from '$lib/valibot';
+	import { resolve } from '$app/paths';
 	import { valibot } from 'sveltekit-superforms/adapters';
 	import { superForm } from 'sveltekit-superforms';
 	import { ArrowRight, Lock, LockOpen, LogIn, Mail, UserRound } from '@lucide/svelte';
 	import { fly, slide } from 'svelte/transition';
 	import { flip } from 'svelte/animate';
+	import { fromAction } from 'svelte/attachments';
 
 	let props: PageProps = $props();
 	let data = $state(props.data);
@@ -14,7 +16,18 @@
 		validators: valibot(registerSchema),
 	});
 
-	const formErrors = $derived(([$errors.name ?? [], $errors.email ?? [], $errors.password ?? [], $errors.passwordConfirm ?? [], $errors._errors ?? []] as string[][]).flat());
+	const formErrors = $derived(
+		(
+			[
+				$errors.name ?? [],
+				$errors.email ?? [],
+				$errors.password ?? [],
+				$errors.passwordConfirm ?? [],
+				$errors._errors ?? [],
+			] as string[][]
+		).flat()
+	);
+	const enhanceAttachment = fromAction(enhance);
 </script>
 
 <svelte:head>
@@ -27,7 +40,7 @@
 		<LogIn />
 		<span>Sign Up</span>
 	</h1>
-	<form class="space-y-4 py-4" method="post" use:enhance>
+	<form class="space-y-4 py-4" method="post" {@attach enhanceAttachment}>
 		<fieldset class="space-y-2">
 			<label class="input-group grid-cols-[auto_1fr_auto]" for="email">
 				<div class="ig-cell preset-tonal" class:text-error-500={$errors.email}>
@@ -98,7 +111,11 @@
 		</fieldset>
 		<div class="mx-auto max-w-xs space-y-1.5 text-center text-sm" aria-live="polite">
 			{#each formErrors as message, i (i)}
-				<p class="card preset-filled-error-300-700 p-2" transition:slide={{ duration: 140 }} animate:flip={{ duration: 160 }}>
+				<p
+					class="card preset-filled-error-300-700 p-2"
+					transition:slide={{ duration: 140 }}
+					animate:flip={{ duration: 160 }}
+				>
 					{message}
 				</p>
 			{/each}
@@ -108,10 +125,12 @@
 				<button class="btn w-full preset-filled-primary-300-700" type="submit">
 					<span>Sign Up</span>
 				</button>
-				<p class="my-2 flex items-center justify-center gap-1 border-t-[.1rem] border-t-primary-200-800 py-1 text-xs">
+				<p
+					class="my-2 flex items-center justify-center gap-1 border-t-[.1rem] border-t-primary-200-800 py-1 text-xs"
+				>
 					<span>Have Account?</span>
 					<ArrowRight size="12" />
-					<a href="/sign-in" class="anchor">Sign In</a>
+					<a href={resolve('/sign-in')} class="anchor">Sign In</a>
 				</p>
 			</div>
 		{/if}
