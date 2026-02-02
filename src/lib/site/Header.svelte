@@ -1,11 +1,12 @@
 <script lang="ts">
 	import type { AuthUser } from '$lib/permissions';
+	import { PUBLIC_SITE_NAME } from '$env/static/public';
 	import { page } from '$app/state';
 	import { resolve } from '$app/paths';
 	import favicon from '$lib/assets/favicon.svg';
+	import NavPublic from '$lib/site/NavPublic.svelte';
 	import { Popover, Portal } from '@skeletonlabs/skeleton-svelte';
-	import { LogOut, Settings, UserRound, UsersRound } from '@lucide/svelte';
-	import Nav from '$lib/site/Nav.svelte';
+	import { House, LogOut, Settings, UserRound, UsersRound } from '@lucide/svelte';
 	const iconSize = 16;
 
 	const logo_class = 'flex items-center gap-2';
@@ -15,7 +16,7 @@
 
 {#snippet siteName()}
 	<img src={favicon} alt="Logo: EWDnet" width="32" height="32" />
-	<span class="hidden sm:inline-block">Site Name</span>
+	<span class="hidden sm:inline-block">{PUBLIC_SITE_NAME}</span>
 {/snippet}
 
 <div class="flex items-center justify-between gap-4">
@@ -25,29 +26,32 @@
 				{@render siteName()}
 			</span>
 		{:else}
-			<a class={logo_class} href={resolve('/')} title="Back to home">
+			<a
+				class={logo_class}
+				href={resolve('/')}
+				title="Back to startpage"
+				aria-label="Back to startpage"
+			>
 				{@render siteName()}
 			</a>
 		{/if}
 	</h2>
-	<!-- {#if page.data.session} -->
 	<nav class="flex-auto" aria-label="Hauptnavigation">
 		<ul class="flex items-center justify-center gap-4">
-			<!-- <li>
-					<a
-						class="btn preset-outlined-primary-200-800 btn-sm hover:preset-filled-primary-200-800"
-						class:preset-filled-primary-200-800={page.url.pathname === '/'}
-						aria-current={page.url.pathname === '/'}
-						href="/"
-					>
-						<House size={iconSize} />
-						<span>Home</span>
-					</a>
-				</li> -->
-			<Nav targetOrdner="(public)" />
+			<li>
+				<a
+					class="btn preset-outlined-primary-200-800 btn-sm hover:preset-filled-primary-200-800"
+					class:preset-filled-primary-200-800={page.url.pathname === '/'}
+					aria-current={page.url.pathname === '/'}
+					href={resolve('/')}
+				>
+					<House size={iconSize} />
+					<span>Home</span>
+				</a>
+			</li>
+			<NavPublic {iconSize} />
 		</ul>
 	</nav>
-	<!-- {/if} -->
 	<div>
 		{#if page.data.session}
 			<Popover>

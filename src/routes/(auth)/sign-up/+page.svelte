@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { PageProps } from './$types';
+	import { PUBLIC_SITE_NAME } from '$env/static/public';
 	import { registerSchema } from '$lib/valibot';
 	import { resolve } from '$app/paths';
 	import { valibot } from 'sveltekit-superforms/adapters';
@@ -31,8 +32,8 @@
 </script>
 
 <svelte:head>
-	<title>Sign Up</title>
-	<meta name="description" content="Create a new account" />
+	<title>Sign Up - {PUBLIC_SITE_NAME}</title>
+	<meta name="description" content="Create a new account on {PUBLIC_SITE_NAME}." />
 </svelte:head>
 
 <section class="mx-auto max-w-xs">

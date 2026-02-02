@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { PageProps } from './$types';
+	import { PUBLIC_SITE_NAME } from '$env/static/public';
 	import { page } from '$app/state';
 	import { resolve } from '$app/paths';
 	import { ROLES } from '$lib/permissions';
@@ -69,8 +70,8 @@
 </script>
 
 <svelte:head>
-	<title>Seiten Titel</title>
-	<meta name="description" content="Seiten Beschreibung" />
+	<title>User {name} - {PUBLIC_SITE_NAME}</title>
+	<meta name="description" content="Profile and details for user {name} on {PUBLIC_SITE_NAME}." />
 </svelte:head>
 
 <section class="m-auto max-w-sm space-y-4">

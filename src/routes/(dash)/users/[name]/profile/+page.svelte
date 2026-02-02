@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { PageProps } from './$types';
+	import { PUBLIC_SITE_NAME } from '$env/static/public';
 	import { page } from '$app/state';
 	import { resolve } from '$app/paths';
 	import { superForm } from 'sveltekit-superforms';
@@ -35,8 +36,8 @@
 </script>
 
 <svelte:head>
-	<title>User Profile: {name}</title>
-	<meta name="description" content="User Profile: First Name, Last Name, Phone, Bio." />
+	<title>User Profile: {name} - {PUBLIC_SITE_NAME}</title>
+	<meta name="description" content="Profile and details for user {name} on {PUBLIC_SITE_NAME}." />
 </svelte:head>
 
 <section class="m-auto max-w-md space-y-4">
