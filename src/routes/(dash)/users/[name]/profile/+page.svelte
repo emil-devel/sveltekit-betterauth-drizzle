@@ -36,7 +36,7 @@
 </script>
 
 <svelte:head>
-	<title>User Profile: {name} - {PUBLIC_SITE_NAME}</title>
+	<title>User Profile {name} - {PUBLIC_SITE_NAME}</title>
 	<meta name="description" content="Profile and details for user {name} on {PUBLIC_SITE_NAME}." />
 </svelte:head>
 
