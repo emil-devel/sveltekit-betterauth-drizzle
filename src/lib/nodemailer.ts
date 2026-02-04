@@ -1,13 +1,13 @@
+import type SMTPTransport from 'nodemailer/lib/smtp-transport';
 // import { SEND_MAIL_FROM, SEND_MAIL_HOST, SEND_MAIL_PASS, SEND_MAIL_PORT, SEND_MAIL_USER } from '$env/static/private';
 import { SEND_MAIL_FROM, SEND_MAIL_HOST, SEND_MAIL_PORT } from '$env/static/private';
 import nodemailer from 'nodemailer';
-import type SMTPTransport from 'nodemailer/lib/smtp-transport';
 
 const transporter = nodemailer.createTransport({
 	host: SEND_MAIL_HOST as string,
 	port: Number(SEND_MAIL_PORT),
 	// secure: true,
-	secure: false,
+	secure: false
 	// auth: {
 	// 	user: SEND_MAIL_USER as string,
 	// 	pass: SEND_MAIL_PASS as string,
@@ -17,7 +17,7 @@ const transporter = nodemailer.createTransport({
 export async function sendEmail({
 	to,
 	subject,
-	text,
+	text
 }: {
 	to: string;
 	subject: string;
@@ -28,7 +28,7 @@ export async function sendEmail({
 			from: SEND_MAIL_FROM as string,
 			to,
 			subject,
-			html: `<p>${text}</p>`,
+			html: `<p>${text}</p>`
 		});
 		return { success: true };
 	} catch (error) {
