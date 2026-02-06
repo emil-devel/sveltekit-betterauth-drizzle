@@ -3,37 +3,37 @@
 	import { page } from '$app/state';
 	import { WorkflowIcon, GlobeIcon, type Icon as IconType } from '@lucide/svelte';
 
-	type PublicPages = {
+	type Pages = {
 		icon?: typeof IconType;
 		title: string;
-		route: '/(public)/test-1' | '/(public)/test-2';
+		href: '/test-1' | '/test-2';
 	};
 
-	const publicPages: PublicPages[] = [
+	const items: Pages[] = [
 		{
 			icon: GlobeIcon,
 			title: 'Page One',
-			route: '/(public)/test-1',
+			href: '/test-1'
 		},
 		{
 			icon: WorkflowIcon,
 			title: 'Page Two',
-			route: '/(public)/test-2',
-		},
+			href: '/test-2'
+		}
 	];
 
 	let { iconSize }: { iconSize?: number } = $props();
 </script>
 
-{#each publicPages as item, i (i)}
+{#each items as item, i (i)}
 	{@const Icon = item.icon}
 	<li>
 		<a
 			class="btn preset-outlined-primary-200-800 btn-sm hover:preset-filled-primary-200-800"
-			class:preset-filled-primary-200-800={page.url.pathname === resolve(item.route)}
-			class:preset-tonal-primary={page.url.pathname.includes(resolve(item.route))}
-			aria-current={page.url.pathname === resolve(item.route)}
-			href={resolve(item.route)}
+			class:preset-filled-primary-200-800={page.url.pathname === resolve(item.href)}
+			class:preset-tonal-primary={page.url.pathname.includes(resolve(item.href))}
+			aria-current={page.url.pathname === resolve(item.href)}
+			href={resolve(item.href)}
 		>
 			<Icon size={iconSize} />
 			<span>{item.title}</span>

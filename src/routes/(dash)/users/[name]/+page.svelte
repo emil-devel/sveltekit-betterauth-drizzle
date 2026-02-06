@@ -17,7 +17,7 @@
 		MailX,
 		UserRoundCheck,
 		UserRoundPen,
-		UserRoundX,
+		UserRoundX
 	} from '@lucide/svelte';
 	const iconSize: number = 16;
 
@@ -34,15 +34,15 @@
 		createdAt,
 		firstName,
 		lastName,
-		updatedAt,
+		updatedAt
 	} = data;
 	const {
 		enhance: emailEnhance,
 		errors: emailErrors,
-		form: emailForm,
+		form: emailForm
 	} = superForm(data.emailForm, {
 		validators: valibot(userEmailSchema),
-		validationMethod: 'oninput',
+		validationMethod: 'oninput'
 	});
 	const { enhance: activeEnhance, form: activeForm } = superForm(data.activeForm);
 	const { enhance: roleEnhance, form: roleForm } = superForm(data.roleForm);

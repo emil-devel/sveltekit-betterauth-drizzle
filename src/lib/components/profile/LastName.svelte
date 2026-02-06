@@ -13,7 +13,7 @@
 	const {
 		enhance: lastNameEnhance,
 		form: lastNameForm,
-		errors: lastNameErrors,
+		errors: lastNameErrors
 	} = superForm(data.lastNameForm, { validators: valibot(profileLastNameSchema) });
 
 	const errorsLastName = $derived(($lastNameErrors.lastName ?? []) as string[]);

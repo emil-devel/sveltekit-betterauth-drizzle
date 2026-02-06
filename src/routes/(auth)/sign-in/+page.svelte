@@ -15,7 +15,7 @@
 	let data = $state(props.data);
 
 	const { enhance, errors, form } = superForm(data.form, {
-		validators: valibot(loginSchema),
+		validators: valibot(loginSchema)
 	});
 
 	const formErrors = $derived(([$errors.email ?? [], $errors.password ?? []] as string[][]).flat());
@@ -37,7 +37,7 @@
 			class="btn w-full preset-filled-surface-200-800 btn-sm"
 			onclick={async () => {
 				await signIn.social({
-					provider: 'github',
+					provider: 'github'
 				});
 			}}
 		>
@@ -48,7 +48,7 @@
 			class="btn w-full preset-filled-surface-200-800 btn-sm"
 			onclick={async () => {
 				await signIn.social({
-					provider: 'google',
+					provider: 'google'
 				});
 			}}
 		>

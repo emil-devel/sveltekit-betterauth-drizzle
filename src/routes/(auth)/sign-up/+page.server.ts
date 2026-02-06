@@ -37,14 +37,14 @@ export const actions: Actions = {
 
 		try {
 			const res = await auth.api.signUpEmail({
-				body: { name, email, password, image },
+				body: { name, email, password, image }
 			});
 
 			const userId = res?.user?.id;
 			if (!userId) {
 				return fail(500, {
 					form,
-					message: 'User was created, but profile could not be initialized.',
+					message: 'User was created, but profile could not be initialized.'
 				});
 			}
 
@@ -57,7 +57,7 @@ export const actions: Actions = {
 				return fail(500, {
 					form,
 					message: 'An error has occurred while creating the user.',
-					error: String(error),
+					error: String(error)
 				});
 			}
 
@@ -69,9 +69,9 @@ export const actions: Actions = {
 			'/',
 			{
 				type: 'success',
-				message: 'You are now registered and need to verify your email before logging in.',
+				message: 'You are now registered and need to verify your email before logging in.'
 			},
 			event
 		);
-	},
+	}
 };

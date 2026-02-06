@@ -5,7 +5,7 @@ import {
 	GITHUB_CLIENT_ID,
 	GITHUB_CLIENT_SECRET,
 	GOOGLE_CLIENT_ID,
-	GOOGLE_CLIENT_SECRET,
+	GOOGLE_CLIENT_SECRET
 } from '$env/static/private';
 import { sendEmail } from '$lib/nodemailer';
 import { db } from '$lib/server/db';
@@ -88,7 +88,7 @@ const findAvailableOAuthUsername = async (rawBase: string): Promise<string> => {
 
 export const auth = betterAuth({
 	database: drizzleAdapter(db, {
-		provider: 'pg',
+		provider: 'pg'
 	}),
 	secret: BETTER_AUTH_SECRET,
 	baseURL: BETTER_AUTH_URL,
@@ -120,9 +120,9 @@ export const auth = betterAuth({
 						.insert(table.profile)
 						.values({ id: crypto.randomUUID(), userId: user.id, name: user.name })
 						.onConflictDoNothing({ target: table.profile.userId });
-				},
-			},
-		},
+				}
+			}
+		}
 	},
 	user: {
 		additionalFields: {
@@ -130,15 +130,15 @@ export const auth = betterAuth({
 				type: 'boolean',
 				required: false,
 				defaultValue: true,
-				input: false,
+				input: false
 			},
 			role: {
 				type: 'string',
 				required: false,
 				defaultValue: 'USER',
-				input: false,
-			},
-		},
+				input: false
+			}
+		}
 	},
 	emailAndPassword: {
 		enabled: true,
@@ -148,7 +148,7 @@ export const auth = betterAuth({
 			void sendEmail({
 				to: user.email,
 				subject: 'Reset your password.',
-				text: `Click the <a href="${url}">link</a> to reset your password.`,
+				text: `Click the <a href="${url}">link</a> to reset your password.`
 			});
 		},
 		resetPasswordTokenExpiresIn: 3600,
@@ -159,11 +159,11 @@ export const auth = betterAuth({
 				'/login',
 				{
 					type: 'success',
-					message: `Password for user ${user.email} has been reset.`,
+					message: `Password for user ${user.email} has been reset.`
 				},
 				getRequestEvent()
 			);
-		},
+		}
 	},
 	emailVerification: {
 		autoSignInAfterVerification: true,
@@ -171,25 +171,25 @@ export const auth = betterAuth({
 			void sendEmail({
 				to: user.email,
 				subject: 'Verify your email address.',
-				text: `Click the <a href="${url}">link</a> to verify your email.`,
+				text: `Click the <a href="${url}">link</a> to verify your email.`
 			});
-		},
+		}
 	},
 	account: {
 		accountLinking: {
 			enabled: true,
-			trustedProviders: ['github', 'google'],
-		},
+			trustedProviders: ['github', 'google']
+		}
 	},
 	socialProviders: {
 		github: {
 			clientId: GITHUB_CLIENT_ID as string,
-			clientSecret: GITHUB_CLIENT_SECRET as string,
+			clientSecret: GITHUB_CLIENT_SECRET as string
 		},
 		google: {
 			clientId: GOOGLE_CLIENT_ID as string,
-			clientSecret: GOOGLE_CLIENT_SECRET as string,
-		},
+			clientSecret: GOOGLE_CLIENT_SECRET as string
+		}
 	},
-	plugins: [sveltekitCookies(getRequestEvent)],
+	plugins: [sveltekitCookies(getRequestEvent)]
 });

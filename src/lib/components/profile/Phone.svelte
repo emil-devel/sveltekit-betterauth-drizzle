@@ -13,7 +13,7 @@
 	const {
 		enhance: phoneEnhance,
 		form: phoneForm,
-		errors: phoneErrors,
+		errors: phoneErrors
 	} = superForm(data.phoneForm, { validators: valibot(profilePhoneSchema) });
 
 	const errorsPhone = $derived(($phoneErrors.phone ?? []) as string[]);

@@ -19,7 +19,7 @@ export const load = (async (event) => {
 				image: table.user.image,
 				avatar: table.profile.avatar,
 				firstName: table.profile.firstName,
-				lastName: table.profile.lastName,
+				lastName: table.profile.lastName
 			})
 			.from(table.user)
 			.leftJoin(table.profile, eq(table.profile.userId, table.user.id))
@@ -27,13 +27,13 @@ export const load = (async (event) => {
 
 		const users = result.map((result) => ({
 			...result,
-			createdAt: result.createdAt.toLocaleDateString(),
+			createdAt: result.createdAt.toLocaleDateString()
 		}));
 
 		return users;
 	};
 
 	return {
-		users: await getUsers(),
+		users: await getUsers()
 	};
 }) satisfies PageServerLoad;

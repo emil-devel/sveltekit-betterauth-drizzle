@@ -15,10 +15,10 @@
 	const {
 		enhance: avatarEnhance,
 		errors: avatarErrors,
-		form: avatarForm,
+		form: avatarForm
 	} = superForm(data.avatarForm, {
 		validators: valibot(profileAvatarSchema),
-		validationMethod: 'onblur',
+		validationMethod: 'onblur'
 	});
 
 	const errorsAvatar = $derived(($avatarErrors.avatar ?? []) as string[]);

@@ -28,7 +28,7 @@ export const load = (async (event) => {
 				avatar: table.profile.avatar,
 				emailPublic: table.profile.emailPublic,
 				firstName: table.profile.firstName,
-				lastName: table.profile.lastName,
+				lastName: table.profile.lastName
 			})
 			.from(table.user)
 			.leftJoin(table.profile, eq(table.profile.name, table.user.name))
@@ -48,7 +48,7 @@ export const load = (async (event) => {
 			),
 			superValidate({ id, active: user.active }, valibot(activeUserSchema)),
 			superValidate({ id, role: user.role }, valibot(roleUserSchema)),
-			superValidate({ id }, valibot(userIdSchema)),
+			superValidate({ id }, valibot(userIdSchema))
 		]);
 
 		return {
@@ -65,7 +65,7 @@ export const load = (async (event) => {
 			createdAt: createdAt.toLocaleDateString(),
 			avatar: user.avatar,
 			firstName: user.firstName,
-			lastName: user.lastName,
+			lastName: user.lastName
 		};
 	};
 
@@ -175,5 +175,5 @@ export const actions: Actions = {
 		}
 
 		redirect('/users', { type: 'success', message: 'User deleted successfully.' }, event.cookies);
-	},
+	}
 };

@@ -22,7 +22,7 @@
 	// Forms
 	const { form: avatarForm } = superForm(data.avatarForm, { warnings: { duplicateId: false } });
 	const { form: firstNameForm } = superForm(data.firstNameForm, {
-		warnings: { duplicateId: false },
+		warnings: { duplicateId: false }
 	});
 	const { form: lastNameForm } = superForm(data.lastNameForm, { warnings: { duplicateId: false } });
 

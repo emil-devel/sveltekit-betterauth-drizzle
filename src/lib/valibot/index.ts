@@ -11,12 +11,12 @@ import {
 	enum_,
 	maxLength,
 	union,
-	literal,
+	literal
 } from 'valibot';
 
 export const loginSchema = object({
 	email: pipe(string(), email()),
-	password: string(),
+	password: string()
 });
 
 export const registerSchema = object({
@@ -46,7 +46,7 @@ export const registerSchema = object({
 		regex(/[0-9]/, 'Password must contain at least one number'),
 		regex(/[^A-Za-z0-9]/, 'Password must contain at least one special character')
 	),
-	passwordConfirm: string(),
+	passwordConfirm: string()
 });
 
 // Per-field schemas for user page partial updates
@@ -70,11 +70,11 @@ export const userNameSchema = object({
 		regex(/^(?![0-9]).*$/, 'Username cannot start with a number'),
 		regex(/^(?!_).*/, 'Username cannot start with an underscore'),
 		regex(/^(?!\.).*/, 'Username cannot start with a dot')
-	),
+	)
 });
 export const userEmailSchema = object({
 	id: string(),
-	emailPublic: union([literal(''), pipe(string(), email())]),
+	emailPublic: union([literal(''), pipe(string(), email())])
 });
 export const activeUserSchema = object({ id: string(), active: boolean() });
 
@@ -82,7 +82,7 @@ export const activeUserSchema = object({ id: string(), active: boolean() });
 export const ROLE_ENUM = {
 	USER: 'USER',
 	REDACTEUR: 'REDACTEUR',
-	ADMIN: 'ADMIN',
+	ADMIN: 'ADMIN'
 } as const;
 
 export const roleUserSchema = object({ id: string(), role: enum_(ROLE_ENUM) });
@@ -90,7 +90,7 @@ export const roleUserSchema = object({ id: string(), role: enum_(ROLE_ENUM) });
 // Per-field schemas for profile page partial updates
 export const profileAvatarSchema = object({
 	id: string(),
-	avatar: string(),
+	avatar: string()
 });
 
 export const profileFirstNameSchema = object({
@@ -122,7 +122,7 @@ export const profileFirstNameSchema = object({
 			// Not start with separator (redundant with base but explicit for message clarity)
 			regex(/^(?![-' ]).*$/, 'First name cannot start with a space, apostrophe or hyphen')
 		)
-	),
+	)
 });
 export const profileLastNameSchema = object({
 	id: string(),
@@ -145,7 +145,7 @@ export const profileLastNameSchema = object({
 			regex(/^(?!.*[-' ]$).*$/, 'Last name cannot end with a space, apostrophe or hyphen'),
 			regex(/^(?![-' ]).*$/, 'Last name cannot start with a space, apostrophe or hyphen')
 		)
-	),
+	)
 });
 export const profilePhoneSchema = object({
 	id: string(),
@@ -163,6 +163,6 @@ export const profilePhoneSchema = object({
 				'Phone number must contain between 7 and 15 digits'
 			)
 		)
-	),
+	)
 });
 export const profileBioSchema = object({ id: string(), bio: optional(string()) });

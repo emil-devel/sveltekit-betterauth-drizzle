@@ -15,7 +15,7 @@ export const user = pgTable('user', {
 	updatedAt: timestamp('updated_at')
 		.defaultNow()
 		.$onUpdate(() => /* @__PURE__ */ new Date())
-		.notNull(),
+		.notNull()
 });
 
 export const profile = pgTable('profile', {
@@ -33,11 +33,11 @@ export const profile = pgTable('profile', {
 	name: text('name')
 		.unique()
 		.references(() => user.name)
-		.notNull(),
+		.notNull()
 });
 
 export const profileRelations = relations(profile, ({ one }) => ({
-	user: one(user, { fields: [profile.userId, profile.name], references: [user.id, user.name] }),
+	user: one(user, { fields: [profile.userId, profile.name], references: [user.id, user.name] })
 }));
 
 export const session = pgTable('session', {
@@ -52,7 +52,7 @@ export const session = pgTable('session', {
 	userAgent: text('user_agent'),
 	userId: text('user_id')
 		.notNull()
-		.references(() => user.id, { onDelete: 'cascade' }),
+		.references(() => user.id, { onDelete: 'cascade' })
 });
 
 export const account = pgTable('account', {
@@ -72,7 +72,7 @@ export const account = pgTable('account', {
 	createdAt: timestamp('created_at').defaultNow().notNull(),
 	updatedAt: timestamp('updated_at')
 		.$onUpdate(() => /* @__PURE__ */ new Date())
-		.notNull(),
+		.notNull()
 });
 
 export const verification = pgTable('verification', {
@@ -84,5 +84,5 @@ export const verification = pgTable('verification', {
 	updatedAt: timestamp('updated_at')
 		.defaultNow()
 		.$onUpdate(() => /* @__PURE__ */ new Date())
-		.notNull(),
+		.notNull()
 });

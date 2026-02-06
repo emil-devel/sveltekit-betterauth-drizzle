@@ -11,6 +11,6 @@ export const load = (async (event) => {
 	return {
 		session,
 		authUser: toAuthUser(event.locals.user ?? null),
-		url: event.url.pathname,
+		url: event.url.pathname
 	};
 }) satisfies LayoutServerLoad;

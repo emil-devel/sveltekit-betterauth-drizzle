@@ -3,7 +3,7 @@ import { createAuthClient } from 'better-auth/svelte';
 
 export const authClient = createAuthClient({
 	baseURL: PUBLIC_BETTER_AUTH_URL,
-	basePath: '/api/auth',
+	basePath: '/api/auth'
 });
 
 export const { signIn, signUp, signOut, useSession, getSession, getAccessToken } = authClient;

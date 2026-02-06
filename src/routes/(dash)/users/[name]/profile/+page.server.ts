@@ -12,7 +12,7 @@ import {
 	profileFirstNameSchema,
 	profileLastNameSchema,
 	profilePhoneSchema,
-	profileBioSchema,
+	profileBioSchema
 } from '$lib/valibot';
 
 export const load = (async (event) => {
@@ -27,7 +27,7 @@ export const load = (async (event) => {
 				firstName: table.profile.firstName,
 				lastName: table.profile.lastName,
 				phone: table.profile.phone,
-				bio: table.profile.bio,
+				bio: table.profile.bio
 			})
 			.from(table.profile)
 			.where(eq(table.profile.name, name))
@@ -60,7 +60,7 @@ export const load = (async (event) => {
 			superValidate(
 				{ id: profile.id, bio: profile.bio as string | undefined },
 				valibot(profileBioSchema)
-			),
+			)
 		]);
 
 		return {
@@ -71,7 +71,7 @@ export const load = (async (event) => {
 			firstNameForm,
 			lastNameForm,
 			phoneForm,
-			bioForm,
+			bioForm
 		};
 	};
 
@@ -104,7 +104,7 @@ export const actions: Actions = {
 		setFlash(
 			{
 				type: 'success',
-				message: `Avatar ${avatarForm.data.avatar === '' ? 'deleted' : 'updated'}.`,
+				message: `Avatar ${avatarForm.data.avatar === '' ? 'deleted' : 'updated'}.`
 			},
 			event.cookies
 		);
@@ -214,5 +214,5 @@ export const actions: Actions = {
 		}
 
 		setFlash({ type: 'success', message: 'Bio updated successfully.' }, event.cookies);
-	},
+	}
 };

@@ -14,7 +14,7 @@
 	let data = $state(props.data);
 
 	const { enhance, errors, form } = superForm(data.form, {
-		validators: valibot(registerSchema),
+		validators: valibot(registerSchema)
 	});
 
 	const formErrors = $derived(
@@ -24,7 +24,7 @@
 				$errors.email ?? [],
 				$errors.password ?? [],
 				$errors.passwordConfirm ?? [],
-				$errors._errors ?? [],
+				$errors._errors ?? []
 			] as string[][]
 		).flat()
 	);

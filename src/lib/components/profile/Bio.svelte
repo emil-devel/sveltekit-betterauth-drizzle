@@ -11,7 +11,7 @@
 
 	const { enhance: bioEnhance, form: bioForm } = superForm(data.bioForm, {
 		validators: valibot(profileBioSchema),
-		dataType: 'json',
+		dataType: 'json'
 	});
 
 	// Tipex editor setup
