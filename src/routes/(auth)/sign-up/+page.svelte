@@ -10,12 +10,13 @@
 	import { flip } from 'svelte/animate';
 	import { fromAction } from 'svelte/attachments';
 
-	let props: PageProps = $props();
-	let data = $state(props.data);
+	let { data }: PageProps = $props();
 
-	const { enhance, errors, form } = superForm(data.form, {
-		validators: valibot(registerSchema)
-	});
+	const { enhance, errors, form } = $derived(
+		superForm(data.form, {
+			validators: valibot(registerSchema)
+		})
+	);
 
 	const formErrors = $derived(
 		(
@@ -28,7 +29,7 @@
 			] as string[][]
 		).flat()
 	);
-	const enhanceAttachment = fromAction(enhance);
+	const enhanceAttachment = $derived(fromAction(enhance));
 </script>
 
 <svelte:head>

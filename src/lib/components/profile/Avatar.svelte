@@ -9,17 +9,19 @@
 	import { fromAction } from 'svelte/attachments';
 
 	let props = $props();
-	let { id, data, isSelf, iconSize } = $state(props);
+	let { id, data, isSelf, iconSize } = $derived(props);
 	let { avatarEdit } = $derived(props);
 
 	const {
 		enhance: avatarEnhance,
 		errors: avatarErrors,
 		form: avatarForm
-	} = superForm(data.avatarForm, {
-		validators: valibot(profileAvatarSchema),
-		validationMethod: 'onblur'
-	});
+	} = $derived(
+		superForm(data.avatarForm, {
+			validators: valibot(profileAvatarSchema),
+			validationMethod: 'onblur'
+		})
+	);
 
 	const errorsAvatar = $derived(($avatarErrors.avatar ?? []) as string[]);
 
@@ -77,7 +79,7 @@
 		}, 100);
 	};
 
-	const avatarEnhanceAttachment = fromAction(avatarEnhance);
+	const avatarEnhanceAttachment = $derived(fromAction(avatarEnhance));
 
 	const avatarFormAttachment = (node: HTMLFormElement) => {
 		avatarFormEl = node;

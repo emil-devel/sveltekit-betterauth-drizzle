@@ -7,14 +7,13 @@
 	import { UserRound } from '@lucide/svelte';
 
 	let props = $props();
-	let { id, isSelf, iconSize } = props;
-	let data = $state(props.data);
+	let { data, id, isSelf, iconSize } = $derived(props);
 
 	const {
 		enhance: lastNameEnhance,
 		form: lastNameForm,
 		errors: lastNameErrors
-	} = superForm(data.lastNameForm, { validators: valibot(profileLastNameSchema) });
+	} = $derived(superForm(data.lastNameForm, { validators: valibot(profileLastNameSchema) }));
 
 	const errorsLastName = $derived(($lastNameErrors.lastName ?? []) as string[]);
 

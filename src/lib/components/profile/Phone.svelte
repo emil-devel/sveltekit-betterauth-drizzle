@@ -7,14 +7,13 @@
 	import { Phone } from '@lucide/svelte';
 
 	let props = $props();
-	let { id, isSelf, iconSize } = props;
-	let data = $state(props.data);
+	let { data, id, isSelf, iconSize } = $derived(props);
 
 	const {
 		enhance: phoneEnhance,
 		form: phoneForm,
 		errors: phoneErrors
-	} = superForm(data.phoneForm, { validators: valibot(profilePhoneSchema) });
+	} = $derived(superForm(data.phoneForm, { validators: valibot(profilePhoneSchema) }));
 
 	const errorsPhone = $derived(($phoneErrors.phone ?? []) as string[]);
 

@@ -21,8 +21,7 @@
 	} from '@lucide/svelte';
 	const iconSize: number = 16;
 
-	let props: PageProps = $props();
-	let data = $state(props.data);
+	let { data }: PageProps = $props();
 
 	const {
 		id,
@@ -35,24 +34,26 @@
 		firstName,
 		lastName,
 		updatedAt
-	} = data;
+	} = $derived(data);
 	const {
 		enhance: emailEnhance,
 		errors: emailErrors,
 		form: emailForm
-	} = superForm(data.emailForm, {
-		validators: valibot(userEmailSchema),
-		validationMethod: 'oninput'
-	});
-	const { enhance: activeEnhance, form: activeForm } = superForm(data.activeForm);
-	const { enhance: roleEnhance, form: roleForm } = superForm(data.roleForm);
-	const { enhance: deleteEnhance } = superForm(data.deleteForm);
+	} = $derived(
+		superForm(data.emailForm, {
+			validators: valibot(userEmailSchema),
+			validationMethod: 'oninput'
+		})
+	);
+	const { enhance: activeEnhance, form: activeForm } = $derived(superForm(data.activeForm));
+	const { enhance: roleEnhance, form: roleForm } = $derived(superForm(data.roleForm));
+	const { enhance: deleteEnhance } = $derived(superForm(data.deleteForm));
 
 	const errorsEmail = $derived(($emailErrors.emailPublic ?? []) as string[]);
-	const emailEnhanceAttachment = fromAction(emailEnhance);
-	const activeEnhanceAttachment = fromAction(activeEnhance);
-	const roleEnhanceAttachment = fromAction(roleEnhance);
-	const deleteEnhanceAttachment = fromAction(deleteEnhance);
+	const emailEnhanceAttachment = $derived(fromAction(emailEnhance));
+	const activeEnhanceAttachment = $derived(fromAction(activeEnhance));
+	const roleEnhanceAttachment = $derived(fromAction(roleEnhance));
+	const deleteEnhanceAttachment = $derived(fromAction(deleteEnhance));
 
 	let deleteConfirm = $state(false);
 

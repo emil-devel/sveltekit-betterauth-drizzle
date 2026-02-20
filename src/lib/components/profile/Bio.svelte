@@ -6,13 +6,15 @@
 	import { fromAction } from 'svelte/attachments';
 
 	let props = $props();
-	let { id, isSelf } = props;
-	let data = $state(props.data);
+	let { id, isSelf } = $derived(props);
+	let { data } = $derived(props);
 
-	const { enhance: bioEnhance, form: bioForm } = superForm(data.bioForm, {
-		validators: valibot(profileBioSchema),
-		dataType: 'json'
-	});
+	const { enhance: bioEnhance, form: bioForm } = $derived(
+		superForm(data.bioForm, {
+			validators: valibot(profileBioSchema),
+			dataType: 'json'
+		})
+	);
 
 	// Tipex editor setup
 	// Initial HTML content from server form
@@ -22,7 +24,7 @@
 	// Always up-to-date HTML extracted from the editor
 	const htmlContent = $derived.by(() => editor?.getHTML() ?? body);
 	const plainText = $derived.by(() => (htmlContent ?? '').replace(/<[^>]*>/g, '').trim());
-	const bioEnhanceAttachment = fromAction(bioEnhance);
+	const bioEnhanceAttachment = $derived(fromAction(bioEnhance));
 
 	// Keep superform field in sync so JSON submission includes latest HTML
 	$effect(() => {
